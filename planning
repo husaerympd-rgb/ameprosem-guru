@@ -1,0 +1,2734 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrasi Guru Generator - Belajar.id Ready</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        background: white;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+  <!-- ==================== VIEW 0: LOGIN & AUTH SCREEN ==================== -->
+  <div id="auth-screen" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden relative my-8">
+      
+      <!-- Card Header -->
+      <div class="bg-gradient-to-tr from-indigo-900 via-indigo-800 to-sky-800 p-6 text-white text-center relative">
+        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-sky-300 text-2xl shadow-inner">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <h2 class="text-xl font-bold tracking-tight">Administrasi Guru Generator</h2>
+        <p class="text-xs text-indigo-200 mt-1">Portal Kurikulum Merdeka • Terintegrasi Belajar.id</p>
+        <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-500/20 text-sky-200 border border-sky-400/30">
+          <i class="fa-solid fa-database"></i> Penyimpanan Multi-Layer Aktif
+        </div>
+      </div>
+
+      <!-- Container: Form Login -->
+      <div id="auth-box-login" class="p-6 sm:p-8 space-y-4">
+        <div class="text-center">
+          <h3 class="font-bold text-slate-800 text-base">Masuk dengan Akun Belajar.id</h3>
+          <p class="text-xs text-slate-500 mt-1">Gunakan akun resmi Kemendikdasmen Anda</p>
+        </div>
+
+        <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+              Username / Email Belajar.id <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">
+                <i class="fa-regular fa-envelope"></i>
+              </span>
+              <input type="text" id="login-email" required placeholder="nama.anda@guru.sma.belajar.id" 
+                class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">Contoh: @guru.sma.belajar.id, @guru.smk.belajar.id, atau @dinas.belajar.id</p>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-bold text-slate-700 uppercase">
+                Kata Sandi <span class="text-rose-500">*</span>
+              </label>
+              <button type="button" onclick="switchAuthBox('reset')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold hover:underline">
+                Lupa Password?
+              </button>
+            </div>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">
+                <i class="fa-solid fa-lock"></i>
+              </span>
+              <input type="password" id="login-password" required placeholder="••••••••" 
+                class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+          </div>
+
+          <div class="pt-1">
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-xs sm:text-sm shadow-md shadow-indigo-600/25 transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Masuk Sekarang
+            </button>
+          </div>
+        </form>
+
+        <!-- Daftar Akun Tersimpan (1-Klik Login) -->
+        <div id="login-saved-accounts-wrapper">
+          <div class="relative flex py-1.5 items-center">
+            <div class="flex-grow border-t border-slate-200"></div>
+            <span class="flex-shrink mx-3 text-[10px] text-slate-400 uppercase font-semibold">Akun Terdaftar (1-Klik Masuk)</span>
+            <div class="flex-grow border-t border-slate-200"></div>
+          </div>
+          <div id="login-saved-accounts-list" class="grid grid-cols-1 gap-1.5 max-h-36 overflow-y-auto custom-scroll pr-0.5 text-xs">
+            <!-- Dynamically populated with registered users -->
+          </div>
+        </div>
+
+        <div class="text-center pt-2 border-t border-slate-100">
+          <span class="text-xs text-slate-500">Belum punya akun?</span>
+          <button type="button" onclick="switchAuthBox('register')" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold ml-1 hover:underline">
+            Daftar Akun Belajar.id
+          </button>
+        </div>
+
+        <!-- Copyright Login -->
+        <div class="text-center pt-2 border-t border-slate-100 text-[11px] text-slate-400 font-medium">
+          <p><i class="fa-regular fa-copyright mr-1"></i>Copyright &copy; Ahmad Husairi-Pengawas SMK</p>
+        </div>
+      </div>
+
+      <!-- Container: Form Registrasi (Belajar.id Strict) -->
+      <div id="auth-box-register" class="hidden p-6 sm:p-8 space-y-4">
+        <div class="text-center">
+          <h3 class="font-bold text-slate-800 text-base">Pendaftaran Akun Baru</h3>
+          <p class="text-xs text-slate-500 mt-1">Khusus pemilik email berdomain <strong>@*.belajar.id</strong></p>
+        </div>
+
+        <form id="form-register" onsubmit="handleRegisterSubmit(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+              Nama Lengkap beserta Gelar <span class="text-rose-500">*</span>
+            </label>
+            <input type="text" id="reg-name" required placeholder="Contoh: Ahmad Subardjo, S.Pd." 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+              Email Akun Belajar.id <span class="text-rose-500">*</span>
+            </label>
+            <input type="email" id="reg-email" required placeholder="nama@guru.sma.belajar.id" 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+            <p id="reg-email-hint" class="text-[10px] text-indigo-600 mt-1 flex items-center gap-1">
+              <i class="fa-solid fa-circle-info"></i> Wajib berakhiran domain <strong>.belajar.id</strong>
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+              Mata Pelajaran yang Diampu <span class="text-rose-500">*</span>
+            </label>
+            <input type="text" id="reg-mapel" required placeholder="Contoh: Biologi / Fisika / Informatika" 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+              Buat Kata Sandi <span class="text-rose-500">*</span>
+            </label>
+            <input type="password" id="reg-password" required minlength="6" placeholder="Minimal 6 karakter" 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div class="pt-2 flex gap-2">
+            <button type="button" onclick="switchAuthBox('login')" class="w-1/3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl">
+              Kembali
+            </button>
+            <button type="submit" class="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-xl text-xs shadow-md transition">
+              <i class="fa-solid fa-user-plus mr-1"></i> Daftarkan Akun
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Container: Form Reset Password -->
+      <div id="auth-box-reset" class="hidden p-6 sm:p-8 space-y-4">
+        <div class="text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg mb-2">
+            <i class="fa-solid fa-key"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-base">Reset Kata Sandi</h3>
+          <p class="text-xs text-slate-500 mt-1">Masukkan email belajar.id terdaftar untuk memperbarui kata sandi baru secara langsung.</p>
+        </div>
+
+        <form id="form-reset" onsubmit="handleResetSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+              Email Belajar.id Terdaftar <span class="text-rose-500">*</span>
+            </label>
+            <input type="email" id="reset-email" required placeholder="nama@guru.sma.belajar.id" 
+              class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+              Kata Sandi Baru <span class="text-rose-500">*</span>
+            </label>
+            <input type="password" id="reset-new-password" required minlength="6" placeholder="Minimal 6 karakter" 
+              class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div class="pt-2 flex gap-2">
+            <button type="button" onclick="switchAuthBox('login')" class="w-1/3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl">
+              Batal
+            </button>
+            <button type="submit" class="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md transition">
+              <i class="fa-solid fa-key mr-1"></i> Simpan Sandi Baru
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== HEADER UTAMA ==================== -->
+  <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-40 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold shadow-lg shadow-sky-500/20">
+          <i class="fa-solid fa-graduation-cap text-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold leading-tight flex items-center gap-2">
+            Administrasi Guru Generator
+            <span class="text-xs bg-sky-500/30 text-sky-200 border border-sky-400/40 px-2 py-0.5 rounded-full font-medium hidden sm:inline-block">Kurikulum Merdeka</span>
+          </h1>
+          <p class="text-xs text-indigo-200">AME • PROTA • PROSEM Otomatis & Tersimpan Permanen</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- User Badge -->
+        <div class="flex items-center space-x-2 bg-indigo-800/80 hover:bg-indigo-700/80 px-3 py-1.5 rounded-lg border border-indigo-700 transition cursor-pointer" onclick="openUserModal()">
+          <div class="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-xs font-bold text-white shadow">
+            <span id="nav-avatar-initial">G</span>
+          </div>
+          <div class="text-left hidden md:block">
+            <div id="nav-user-name" class="text-xs font-medium text-white truncate max-w-[140px]">-</div>
+            <div id="nav-user-email" class="text-[10px] text-indigo-300 truncate max-w-[140px]">-</div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-[10px] text-indigo-300 ml-1"></i>
+        </div>
+
+        <!-- Tombol Cetak Cepat -->
+        <button onclick="switchTab('export')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-1.5 shadow transition">
+          <i class="fa-solid fa-print"></i>
+          <span class="hidden sm:inline">Cetak Dokumen</span>
+        </button>
+
+        <!-- Tombol Logout Header -->
+        <button onclick="performLogout()" class="bg-rose-600/90 hover:bg-rose-600 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 shadow transition" title="Keluar dari Aplikasi">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span class="hidden sm:inline">Keluar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="bg-white border-b border-slate-200 sticky top-16 z-30 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex space-x-1 sm:space-x-4 overflow-x-auto py-2.5 custom-scroll text-sm font-medium">
+        <button id="tab-btn-dashboard" onclick="switchTab('dashboard')" class="tab-btn px-3 py-2 rounded-lg text-indigo-700 bg-indigo-50 flex items-center gap-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </button>
+        <button id="tab-btn-profile" onclick="switchTab('profile')" class="tab-btn px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center gap-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-school"></i>
+          <span>Profil Sekolah & Guru</span>
+        </button>
+        <button id="tab-btn-ame" onclick="switchTab('ame')" class="tab-btn px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center gap-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>1. Analisis Minggu Efektif (AME)</span>
+        </button>
+        <button id="tab-btn-prota" onclick="switchTab('prota')" class="tab-btn px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center gap-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-list-check"></i>
+          <span>2. Program Tahunan (PROTA)</span>
+        </button>
+        <button id="tab-btn-prosem" onclick="switchTab('prosem')" class="tab-btn px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center gap-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-table-cells"></i>
+          <span>3. Program Semester (PROSEM)</span>
+        </button>
+        <button id="tab-btn-export" onclick="switchTab('export')" class="tab-btn px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center gap-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-file-export"></i>
+          <span>Menu Cetak & Ekspor</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <div id="view-dashboard" class="space-y-6">
+      <!-- Welcome Banner -->
+      <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-sky-800 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-2xl">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+              <i class="fa-solid fa-shield-halved"></i> Terhubung Akun Belajar.id
+            </span>
+            <span id="dash-badge-status-sekolah" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/30 text-sky-200 border border-sky-400/30">
+              Sekolah Negeri
+            </span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
+              <i class="fa-solid fa-cloud-check"></i> Tersimpan Otomatis
+            </span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Selamat Datang, <span id="dash-greeting-name">-</span></h2>
+          <p class="mt-2 text-indigo-100 text-sm leading-relaxed">
+            Kelola seluruh administrasi perangkat ajar tahun pelajaran <span id="dash-tp-badge" class="font-semibold text-white">2025/2026</span> secara otomatis. Seluruh akun yang didaftarkan dan isian perangkat ajar disimpan secara permanen di perangkat Anda.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <button onclick="switchTab('ame')" class="bg-white text-indigo-900 font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm hover:bg-slate-100 shadow transition flex items-center gap-2">
+              <i class="fa-solid fa-bolt text-amber-500"></i> Mulai Susun AME
+            </button>
+            <button onclick="switchTab('profile')" class="bg-indigo-700/60 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-xl text-xs sm:text-sm border border-indigo-500/40 transition flex items-center gap-2">
+              <i class="fa-solid fa-user-pen"></i> Perbarui Profil Guru
+            </button>
+            <button onclick="scrollToRekapGuru()" class="bg-sky-600/80 hover:bg-sky-600 text-white font-medium px-4 py-2 rounded-xl text-xs sm:text-sm border border-sky-400/40 transition flex items-center gap-2">
+              <i class="fa-solid fa-users"></i> Rekap Guru Terdaftar
+            </button>
+            <!-- Tombol Logout di Dashboard -->
+            <button onclick="performLogout()" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm shadow transition flex items-center gap-2">
+              <i class="fa-solid fa-power-off"></i> Logout (Keluar)
+            </button>
+          </div>
+        </div>
+        <div class="absolute -right-8 -bottom-10 opacity-10 text-white text-9xl pointer-events-none">
+          <i class="fa-solid fa-book-open-reader"></i>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Card 1: Profil -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Identitas Guru</span>
+            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-id-card"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div id="dash-stat-school" class="font-bold text-slate-800 text-base truncate">-</div>
+            <div id="dash-stat-mapel" class="text-xs text-slate-500 truncate">-</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-emerald-600 font-medium flex items-center gap-1">
+              <i class="fa-solid fa-circle-check"></i> Profil Aktif
+            </span>
+            <button onclick="switchTab('profile')" class="text-indigo-600 hover:underline">Ubah</button>
+          </div>
+        </div>
+
+        <!-- Card 2: AME -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Minggu Efektif (AME)</span>
+            <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="font-bold text-slate-800 text-xl"><span id="dash-stat-total-jp">0</span> <span class="text-xs font-normal text-slate-500">JP / Tahun</span></div>
+            <div class="text-xs text-slate-500"><span id="dash-stat-eff-weeks">0</span> Pekan Efektif KBM</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-emerald-600 font-medium flex items-center gap-1">
+              <i class="fa-solid fa-circle-check"></i> Siap Dialokasikan
+            </span>
+            <button onclick="switchTab('ame')" class="text-indigo-600 hover:underline">Kelola</button>
+          </div>
+        </div>
+
+        <!-- Card 3: PROTA -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Program Tahunan</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-list-ol"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="font-bold text-slate-800 text-xl"><span id="dash-stat-prota-count">0</span> <span class="text-xs font-normal text-slate-500">Materi Pokok</span></div>
+            <div class="text-xs text-slate-500">Alokasi: <span id="dash-stat-prota-allocated">0</span>/<span id="dash-stat-prota-target">0</span> JP</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span id="dash-stat-prota-badge" class="text-slate-400 font-medium flex items-center gap-1">
+              <i class="fa-regular fa-clock"></i> Belum diisi
+            </span>
+            <button onclick="switchTab('prota')" class="text-indigo-600 hover:underline">Atur</button>
+          </div>
+        </div>
+
+        <!-- Card 4: PROSEM -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Program Semester</span>
+            <div class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-table-list"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="font-bold text-slate-800 text-xl"><span id="dash-stat-prosem-status">Belum diisi</span></div>
+            <div class="text-xs text-slate-500">Ganjil & Genap Terpetakan</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-emerald-600 font-medium flex items-center gap-1">
+              <i class="fa-solid fa-circle-check"></i> Siap Dicetak
+            </span>
+            <button onclick="switchTab('prosem')" class="text-indigo-600 hover:underline">Cek Grid</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU: REKAP GURU YANG TERDAFTAR -->
+      <div id="section-rekap-guru" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg flex-shrink-0">
+              <i class="fa-solid fa-users-rectangle"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                Rekap Guru yang Terdaftar
+                <span id="rekap-guru-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">0 Guru</span>
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">Daftar rekapitulasi akun guru Belajar.id yang terdaftar beserta progres penyusunan administrasi AME, PROTA, dan PROSEM.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-xs">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="rekap-guru-search" oninput="renderRekapGuruTable()" placeholder="Cari nama, sekolah, mapel..." 
+                class="pl-8 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none w-52 sm:w-64">
+            </div>
+            <button onclick="exportRekapGuruCSV()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition" title="Unduh Rekap Excel/CSV">
+              <i class="fa-solid fa-file-excel"></i> Unduh Rekap (.csv)
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-4 overflow-x-auto custom-scroll">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-y border-slate-200 uppercase tracking-wider text-[11px]">
+                <th class="py-3 px-3 w-10 text-center">No</th>
+                <th class="py-3 px-3">Nama Guru & Akun Belajar.id</th>
+                <th class="py-3 px-3">Satuan Pendidikan</th>
+                <th class="py-3 px-3">Mata Pelajaran</th>
+                <th class="py-3 px-3 text-center">Pagu AME</th>
+                <th class="py-3 px-3 text-center">Status PROTA</th>
+                <th class="py-3 px-3 text-center">Status PROSEM</th>
+                <th class="py-3 px-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="rekap-guru-table-body" class="divide-y divide-slate-200">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Data Backup / Restore Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg flex-shrink-0">
+            <i class="fa-solid fa-hard-drive"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-800 text-sm">Manajemen Penyimpanan & Cadangan Data (Backup)</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Akun dan perangkat ajar Anda tersimpan otomatis di peramban ini. Gunakan fitur cadangkan jika ingin memindahkan data ke komputer/HP lain.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 flex-shrink-0">
+          <button onclick="exportBackupJSON()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-download text-indigo-600"></i> Cadangkan Data (.json)
+          </button>
+          <label class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-xl text-xs flex items-center gap-1.5 cursor-pointer transition">
+            <i class="fa-solid fa-upload"></i> Pulihkan Data
+            <input type="file" accept=".json" onchange="importBackupJSON(event)" class="hidden">
+          </label>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-diagram-project text-indigo-600"></i> Alur Kerja Otomatis Administrasi Guru
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 relative">
+            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs mb-2">1</div>
+            <h4 class="font-bold text-slate-800 text-sm">Hitung Pekan Efektif (AME)</h4>
+            <p class="text-slate-600 mt-1">Isi jumlah minggu kalender & libur per bulan. Sistem menghitung otomatis total Minggu Efektif dan Pagu Total JP.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 relative">
+            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs mb-2">2</div>
+            <h4 class="font-bold text-slate-800 text-sm">Input Materi di PROTA</h4>
+            <p class="text-slate-600 mt-1">Pagu JP otomatis terkunci dari AME. Anda cukup memasukkan Bab materi dan jamnya hingga meteran alokasi tepat 100%.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 relative">
+            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs mb-2">3</div>
+            <h4 class="font-bold text-slate-800 text-sm">PROSEM & Cetak Instan</h4>
+            <p class="text-slate-600 mt-1">Semua bab PROTA otomatis mengisi baris PROSEM. Gunakan tombol 'Bagi JP Otomatis' lalu unduh Word atau PDF resmi.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright Dashboard -->
+      <div class="pt-4 pb-2 text-center text-xs text-slate-400 font-medium border-t border-slate-200/60">
+        <p><i class="fa-regular fa-copyright mr-1"></i>Copyright &copy; Ahmad Husairi-Pengawas SMK</p>
+      </div>
+    </div>
+
+    <div id="view-profile" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="border-b border-slate-200 pb-4 mb-6">
+          <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-school text-indigo-600"></i>
+            Identitas Sekolah & Guru
+          </h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-1">Data ini akan menjadi kop surat resmi dan lembar pengesahan pada dokumen AME, PROTA, dan PROSEM.</p>
+        </div>
+
+        <form id="form-profile" onsubmit="saveProfile(event)" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Jenjang Sekolah -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Jenjang Satuan Pendidikan <span class="text-rose-500">*</span>
+              </label>
+              <select id="prof-jenjang" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+                <option value="SMA">SMA (Sekolah Menengah Atas)</option>
+                <option value="SMK">SMK (Sekolah Menengah Kejuruan)</option>
+                <option value="SLB">SLB (Sekolah Luar Biasa)</option>
+              </select>
+              <p class="text-[11px] text-slate-400 mt-1">Dibatasi khusus untuk jenjang SMA, SMK, dan SLB sesuai ketentuan Kemendikdasmen.</p>
+            </div>
+
+            <!-- Status Sekolah (Negeri / Swasta) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Status Sekolah <span class="text-rose-500">*</span>
+              </label>
+              <select id="prof-status-sekolah" onchange="handleSchoolStatusChange(this.value)" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none font-semibold text-indigo-700">
+                <option value="NEGERI">NEGERI (PNS / PPPK Aktif)</option>
+                <option value="SWASTA">SWASTA (Yayasan / Non-PNS)</option>
+              </select>
+              <p id="prof-status-hint" class="text-[11px] text-emerald-600 mt-1 font-medium">Status Negeri dipilih: Field NIP diaktifkan.</p>
+            </div>
+
+            <!-- Nama Sekolah -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Nama Sekolah <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="prof-sekolah" required placeholder="Contoh: SMAN 1 Garut" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+
+            <!-- Nama Guru -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Nama Lengkap Guru (beserta Gelar) <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="prof-nama" required placeholder="Contoh: Budi Santoso, S.Pd., M.M." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+
+            <!-- NIP Tersendiri -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  NIP Guru (18 Digit)
+                </label>
+                <span id="prof-nip-status-tag" class="text-[10px] px-2 py-0.5 rounded font-semibold bg-emerald-100 text-emerald-800">Aktif (Negeri)</span>
+              </div>
+              <input type="text" id="prof-nip" placeholder="19850412 201001 1 014" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+              <p id="prof-nip-desc" class="text-[11px] text-slate-400 mt-1">Wajib bagi Guru ASN (PNS/PPPK) di sekolah negeri.</p>
+            </div>
+
+            <!-- NUPTK Tersendiri -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                NUPTK Guru (16 Digit)
+              </label>
+              <input type="text" id="prof-nuptk" placeholder="Contoh: 8439762664200032 atau '-'" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+              <p class="text-[11px] text-slate-400 mt-1">Berlaku untuk seluruh guru terdata di Dapodik (Negeri & Swasta).</p>
+            </div>
+
+            <!-- Mata Pelajaran -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Mata Pelajaran <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="prof-mapel" required placeholder="Contoh: Bahasa Indonesia" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+
+            <!-- Fase / Kelas -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Fase / Tingkat Kelas <span class="text-rose-500">*</span>
+              </label>
+              <select id="prof-fase" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+                <option value="Fase E (Kelas X)">Fase E (Kelas X)</option>
+                <option value="Fase F (Kelas XI)">Fase F (Kelas XI)</option>
+                <option value="Fase F (Kelas XII)">Fase F (Kelas XII)</option>
+              </select>
+            </div>
+
+            <!-- Tahun Pelajaran -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Tahun Pelajaran <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="prof-tp" required value="2025/2026" placeholder="Contoh: 2025/2026" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+
+            <!-- Nama Kepala Sekolah -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Nama Kepala Sekolah <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="prof-kepsek" required placeholder="Contoh: Drs. H. Ahmad Fauzi, M.Pd." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+
+            <!-- NIP Kepala Sekolah -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                NIP Kepala Sekolah
+              </label>
+              <input type="text" id="prof-nip-kepsek" placeholder="19700101 199501 1 001" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+
+            <!-- Kota/Kabupaten & Tanggal TTD -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Kota Pengesahan & Titimangsa Dokumen
+              </label>
+              <input type="text" id="prof-titimangsa" placeholder="Contoh: Garut, 15 Juli 2025" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-200 flex justify-end">
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm shadow-md shadow-indigo-600/20 transition flex items-center gap-2">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Data Profil
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 3: AME (ANALISIS MINGGU EFEKTIF) ==================== -->
+    <div id="view-ame" class="hidden space-y-6">
+      
+      <!-- MODUL AI INPUT KALENDER PENDIDIKAN & STRUKTUR KURIKULUM -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        
+        <!-- Kotak 1: Input Kalender Pendidikan (JPEG/JPG/PNG) -->
+        <div class="bg-white rounded-2xl border border-indigo-200 p-5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg">
+                <i class="fa-solid fa-calendar-day"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-800 text-sm">Input Kalender Pendidikan (AI Generator)</h3>
+                <p class="text-[11px] text-slate-400">Analisis otomatis minggu kalender & libur sekolah</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-semibold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full">Format: JPG, JPEG, PNG</span>
+          </div>
+
+          <div class="mt-4">
+            <label for="upload-kalender" class="border-2 border-dashed border-indigo-200 hover:border-indigo-500 bg-slate-50/70 hover:bg-indigo-50/40 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition text-center group">
+              <i class="fa-solid fa-cloud-arrow-up text-2xl text-indigo-500 group-hover:scale-110 transition-transform mb-2"></i>
+              <span class="text-xs font-bold text-slate-700">Pilih Berkas Kalender Pendidikan</span>
+              <span class="text-[10px] text-slate-400 mt-0.5">Unggah foto / tangkapan layar kalender (JPG, JPEG, PNG)</span>
+              <input type="file" id="upload-kalender" accept=".jpg,.jpeg,.png,image/jpeg,image/png" onchange="processKalenderPendidikan(event)" class="hidden">
+            </label>
+            <div id="status-analisis-kalender" class="mt-2.5 text-xs hidden items-center justify-between p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800">
+              <span class="flex items-center gap-2 font-medium">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                <span id="kalender-filename">kalender_2025.jpg</span> (Teranalisis AI)
+              </span>
+              <span class="text-[10px] text-slate-500 italic">*Hasil saran AI siap diedit di tabel</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kotak 2: Input Struktur Kurikulum (Permendikdasmen No. 13 Tahun 2026) -->
+        <div class="bg-white rounded-2xl border border-sky-200 p-5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-lg">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-800 text-sm">Input Struktur Kurikulum (Permendikdasmen 13/2026)</h3>
+                <p class="text-[11px] text-slate-400">Ekstraksi otomatis beban jam tatap muka (JP/Minggu)</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-semibold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full">Format: JPG, JPEG, PNG</span>
+          </div>
+
+          <div class="mt-4">
+            <label for="upload-kurikulum" class="border-2 border-dashed border-sky-200 hover:border-sky-500 bg-slate-50/70 hover:bg-sky-50/40 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition text-center group">
+              <i class="fa-solid fa-file-invoice text-2xl text-sky-500 group-hover:scale-110 transition-transform mb-2"></i>
+              <span class="text-xs font-bold text-slate-700">Pilih Berkas Foto Struktur Kurikulum</span>
+              <span class="text-[10px] text-slate-400 mt-0.5">Unggah tabel kurikulum resmi (JPG, JPEG, PNG)</span>
+              <input type="file" id="upload-kurikulum" accept=".jpg,.jpeg,.png,image/jpeg,image/png" onchange="processStrukturKurikulum(event)" class="hidden">
+            </label>
+            <div id="status-analisis-kurikulum" class="mt-2.5 text-xs hidden items-center justify-between p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-900">
+              <span class="flex items-center gap-2 font-medium">
+                <i class="fa-solid fa-circle-check text-sky-600"></i>
+                <span id="kurikulum-filename">struktur_kurikulum.png</span>
+              </span>
+              <span id="kurikulum-result-text" class="text-[11px] font-bold text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200">
+                Terdeteksi: 3 JP / Minggu
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BANNER REGULASI: PERMENDIKDASMEN NO. 13 TAHUN 2026 -->
+      <div class="bg-gradient-to-r from-indigo-900 via-sky-900 to-indigo-950 text-white rounded-2xl p-4 sm:p-5 shadow-sm border border-indigo-700/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400/30 text-amber-300 flex items-center justify-center text-lg flex-shrink-0 mt-0.5">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-extrabold uppercase tracking-wide text-sky-200">Rujukan Yuridis Kurikulum Merdeka</span>
+              <span class="text-[10px] bg-amber-400 text-slate-900 font-bold px-2 py-0.5 rounded-full">Permendikdasmen No. 13 Thn 2026</span>
+            </div>
+            <p class="text-xs text-indigo-100 mt-1 leading-relaxed">
+              Regulasi menetapkan <strong>Asumsi 36 Minggu Efektif Belajar per Tahun</strong> (<strong>18 Minggu</strong> Semester Ganjil & <strong>18 Minggu</strong> Semester Genap) sebagai basis alokasi beban jam pelajaran (JP).
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button type="button" onclick="syncToPermendikdasmenStandard()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold text-xs px-3.5 py-2 rounded-xl transition shadow flex items-center gap-1.5 whitespace-nowrap">
+            <i class="fa-solid fa-wand-magic-sparkles text-indigo-900"></i> Sinkronkan ke Standar 36 Minggu
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-calendar-check text-indigo-600"></i>
+              Analisis Minggu Efektif (AME)
+            </h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-1">Perhitungan otomatis jam tatap muka efektif disinkronkan dengan standar Permendikdasmen No. 13/2026. Angka dapat disesuaikan manual.</p>
+          </div>
+          <!-- JP Per Minggu setting -->
+          <div class="bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2 flex items-center gap-3">
+            <div class="text-xs font-bold text-indigo-900">Beban Jam Mengajar:</div>
+            <div class="flex items-center gap-1.5">
+              <input type="number" id="ame-jp-per-week" min="1" max="10" value="3" onchange="updateAMEComputations()" class="w-16 bg-white border border-indigo-300 rounded-lg px-2 py-1 text-sm text-center font-bold text-indigo-700 outline-none focus:ring-2 focus:ring-indigo-500">
+              <span class="text-xs font-semibold text-indigo-800">JP / Minggu</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex border-b border-slate-200">
+          <button id="ame-tab-btn-ganjil" onclick="switchAMESemester('ganjil')" class="px-5 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-700 flex items-center gap-2">
+            <i class="fa-regular fa-calendar"></i> Semester Ganjil (Juli - Desember)
+          </button>
+          <button id="ame-tab-btn-genap" onclick="switchAMESemester('genap')" class="px-5 py-2.5 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-indigo-600 flex items-center gap-2">
+            <i class="fa-regular fa-calendar"></i> Semester Genap (Januari - Juni)
+          </button>
+        </div>
+
+        <!-- Table AME Container -->
+        <div class="mt-4 overflow-x-auto custom-scroll">
+          <table class="w-full text-left text-xs sm:text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-y border-slate-200 uppercase tracking-wider text-[11px]">
+                <th class="py-3 px-3 w-12 text-center">No</th>
+                <th class="py-3 px-4">Nama Bulan</th>
+                <th class="py-3 px-4 text-center">Jumlah Minggu Kalender</th>
+                <th class="py-3 px-4 text-center">Minggu Tidak Efektif</th>
+                <th class="py-3 px-4">Keterangan Kegiatan Non-KBM</th>
+                <th class="py-3 px-4 text-center bg-indigo-50 text-indigo-900 font-bold">Minggu Efektif</th>
+                <th class="py-3 px-4 text-center bg-emerald-50 text-emerald-900 font-bold">Jam Efektif (JP)</th>
+              </tr>
+            </thead>
+            <tbody id="ame-table-body" class="divide-y divide-slate-200">
+              <!-- Dynamically rendered by JS -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-50 font-bold text-slate-800 border-t-2 border-slate-300">
+                <td colspan="2" class="py-3.5 px-4 text-right">TOTAL SEMESTER INI:</td>
+                <td id="ame-total-kalender" class="py-3.5 px-4 text-center">0</td>
+                <td id="ame-total-non-eff" class="py-3.5 px-4 text-center text-rose-600">0</td>
+                <td class="py-3.5 px-4 text-slate-400 italic font-normal text-xs">-</td>
+                <td id="ame-total-eff" class="py-3.5 px-4 text-center bg-indigo-100 text-indigo-900 text-base">0</td>
+                <td id="ame-total-jp" class="py-3.5 px-4 text-center bg-emerald-100 text-emerald-900 text-base">0 JP</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
+          <div class="p-3 bg-white rounded-lg border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-500 uppercase">Pagu Semester Ganjil</span>
+            <div id="ame-badge-ganjil" class="text-lg font-black text-indigo-700 mt-1">0 JP (0 Minggu)</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Target: 18 Minggu</div>
+          </div>
+          <div class="p-3 bg-white rounded-lg border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-500 uppercase">Pagu Semester Genap</span>
+            <div id="ame-badge-genap" class="text-lg font-black text-sky-700 mt-1">0 JP (0 Minggu)</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Target: 18 Minggu</div>
+          </div>
+          <div class="p-3 bg-white rounded-lg border border-emerald-200 bg-emerald-50/50">
+            <span class="text-[11px] font-semibold text-emerald-700 uppercase">Total Efektif Setahun</span>
+            <div id="ame-badge-total" class="text-lg font-black text-emerald-700 mt-1">0 JP (0 Mgg)</div>
+            <div class="text-[10px] text-emerald-600 mt-0.5 font-semibold">Pagu Jam AME</div>
+          </div>
+          <div class="p-3 bg-white rounded-lg border border-indigo-200 bg-indigo-50/40 flex flex-col justify-center">
+            <span class="text-[11px] font-semibold text-indigo-700 uppercase">Status Permendikdasmen 13/2026</span>
+            <div id="ame-badge-compliance" class="mt-1 inline-flex items-center justify-center gap-1 text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full">
+              <i class="fa-solid fa-triangle-exclamation"></i> Belum Disinkronkan
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-prota" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-indigo-600"></i>
+              Program Tahunan (PROTA)
+            </h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-1">
+              Alokasikan jam pelajaran untuk setiap elemen/materi. Pagu jam otomatis sinkron dengan AME:
+              <strong id="prota-target-display" class="text-indigo-700">0 JP</strong>.
+            </p>
+          </div>
+          <button onclick="openAddProtaModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-circle-plus"></i> Tambah Materi / Bab
+          </button>
+        </div>
+
+        <div class="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <div class="flex flex-wrap items-center justify-between text-xs font-bold mb-2">
+            <div class="flex items-center gap-2">
+              <span>Status Distribusi Jam:</span>
+              <span id="prota-status-tag" class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">Belum Diisi</span>
+            </div>
+            <div>
+              Teralokasi: <span id="prota-total-allocated" class="text-indigo-700">0</span> / <span id="prota-total-target" class="text-slate-700">0</span> JP
+            </div>
+          </div>
+          <!-- Progress bar -->
+          <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+            <div id="prota-progress-bar" class="bg-amber-500 h-3 rounded-full transition-all duration-300" style="width: 0%;"></div>
+          </div>
+          <div id="prota-alert-msg" class="mt-2 text-[11px] text-amber-700 flex items-center gap-1 font-medium">
+            <i class="fa-solid fa-circle-info"></i> Silakan lengkapi AME dan tambahkan materi PROTA.
+          </div>
+        </div>
+
+        <!-- Table PROTA -->
+        <div class="mt-6 overflow-x-auto custom-scroll">
+          <table class="w-full text-left text-xs sm:text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-y border-slate-200 uppercase tracking-wider text-[11px]">
+                <th class="py-3 px-3 w-12 text-center">No</th>
+                <th class="py-3 px-3 w-28 text-center">Semester</th>
+                <th class="py-3 px-4 w-44">Elemen Capaian</th>
+                <th class="py-3 px-4">Materi Pokok / Tujuan Pembelajaran</th>
+                <th class="py-3 px-4 w-28 text-center bg-indigo-50 text-indigo-900 font-bold">Alokasi (JP)</th>
+                <th class="py-3 px-3 w-24 text-center no-print">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="prota-table-body" class="divide-y divide-slate-200">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-50 font-bold text-slate-800 border-t-2 border-slate-300">
+                <td colspan="4" class="py-3.5 px-4 text-right">TOTAL ALOKASI JP TAHUNAN:</td>
+                <td id="prota-footer-total" class="py-3.5 px-4 text-center bg-indigo-100 text-indigo-900 text-base">0 JP</td>
+                <td class="no-print"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-prosem" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-table-cells text-indigo-600"></i>
+              Program Semester (PROSEM)
+            </h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-1">Pemetaan distribusi jam pelajaran ke dalam pekan per bulan. Materi diambil otomatis dari PROTA.</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="autoDistributeProsem()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Bagi JP Otomatis
+            </button>
+            <button onclick="resetProsemDistribution()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2 rounded-xl text-xs flex items-center gap-1 transition">
+              <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Semester toggle -->
+        <div class="mt-4 flex border-b border-slate-200">
+          <button id="prosem-tab-btn-ganjil" onclick="switchProsemSemester('ganjil')" class="px-5 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-700 flex items-center gap-2">
+            <i class="fa-regular fa-calendar"></i> Semester Ganjil (Juli - Des)
+          </button>
+          <button id="prosem-tab-btn-genap" onclick="switchProsemSemester('genap')" class="px-5 py-2.5 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-indigo-600 flex items-center gap-2">
+            <i class="fa-regular fa-calendar"></i> Semester Genap (Jan - Jun)
+          </button>
+        </div>
+
+        <div class="mt-4 overflow-x-auto custom-scroll border border-slate-200 rounded-xl">
+          <table class="w-full text-left text-xs border-collapse min-w-[950px]">
+            <thead class="bg-slate-100 text-slate-700 font-semibold text-center border-b border-slate-200">
+              <tr>
+                <th rowspan="2" class="p-2 border-r border-slate-200 w-10">No</th>
+                <th rowspan="2" class="p-2 border-r border-slate-200 text-left min-w-[220px]">Materi Pokok (Dari PROTA)</th>
+                <th rowspan="2" class="p-2 border-r border-slate-200 w-14 bg-indigo-50 text-indigo-900">Jml JP</th>
+                <!-- Months header (6 months) -->
+                <th colspan="5" id="prosem-m1-name" class="p-1 border-r border-slate-200 bg-sky-50 text-sky-900">Juli</th>
+                <th colspan="5" id="prosem-m2-name" class="p-1 border-r border-slate-200 bg-sky-50 text-sky-900">Agustus</th>
+                <th colspan="5" id="prosem-m3-name" class="p-1 border-r border-slate-200 bg-sky-50 text-sky-900">September</th>
+                <th colspan="5" id="prosem-m4-name" class="p-1 border-r border-slate-200 bg-sky-50 text-sky-900">Oktober</th>
+                <th colspan="5" id="prosem-m5-name" class="p-1 border-r border-slate-200 bg-sky-50 text-sky-900">November</th>
+                <th colspan="5" id="prosem-m6-name" class="p-1 border-r border-slate-200 bg-sky-50 text-sky-900">Desember</th>
+                <th rowspan="2" class="p-2 w-14 bg-emerald-50 text-emerald-900">Tersalur</th>
+              </tr>
+              <!-- Week sub-headers (1-5 for each of 6 months = 30 weeks) -->
+              <tr class="text-[10px] text-slate-500 bg-slate-50 border-t border-slate-200">
+                <th class="p-1 border-r border-slate-200">1</th><th class="p-1 border-r border-slate-200">2</th><th class="p-1 border-r border-slate-200">3</th><th class="p-1 border-r border-slate-200">4</th><th class="p-1 border-r border-slate-200">5</th>
+                <th class="p-1 border-r border-slate-200">1</th><th class="p-1 border-r border-slate-200">2</th><th class="p-1 border-r border-slate-200">3</th><th class="p-1 border-r border-slate-200">4</th><th class="p-1 border-r border-slate-200">5</th>
+                <th class="p-1 border-r border-slate-200">1</th><th class="p-1 border-r border-slate-200">2</th><th class="p-1 border-r border-slate-200">3</th><th class="p-1 border-r border-slate-200">4</th><th class="p-1 border-r border-slate-200">5</th>
+                <th class="p-1 border-r border-slate-200">1</th><th class="p-1 border-r border-slate-200">2</th><th class="p-1 border-r border-slate-200">3</th><th class="p-1 border-r border-slate-200">4</th><th class="p-1 border-r border-slate-200">5</th>
+                <th class="p-1 border-r border-slate-200">1</th><th class="p-1 border-r border-slate-200">2</th><th class="p-1 border-r border-slate-200">3</th><th class="p-1 border-r border-slate-200">4</th><th class="p-1 border-r border-slate-200">5</th>
+                <th class="p-1 border-r border-slate-200">1</th><th class="p-1 border-r border-slate-200">2</th><th class="p-1 border-r border-slate-200">3</th><th class="p-1 border-r border-slate-200">4</th><th class="p-1 border-r border-slate-200">5</th>
+              </tr>
+            </thead>
+            <tbody id="prosem-table-body" class="divide-y divide-slate-200 font-mono text-center">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-50 font-bold font-sans text-slate-800 border-t-2 border-slate-300">
+                <td colspan="2" class="p-2.5 text-right font-bold text-xs">JUMLAH JP TERSALURKAN:</td>
+                <td id="prosem-foot-target" class="p-2.5 text-center bg-indigo-100 text-indigo-900 font-bold">0</td>
+                <td colspan="30" class="p-2.5 text-slate-400 font-normal text-[11px] italic text-left pl-4">Distribusi jam pelajaran per minggu (dapat diedit langsung pada kotak)</td>
+                <td id="prosem-foot-distributed" class="p-2.5 text-center bg-emerald-100 text-emerald-900 font-bold">0</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-export" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-file-export text-indigo-600"></i>
+              Menu Cetak & Ekspor Dokumen
+            </h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-1">Unduh dokumen resmi dalam format Microsoft Word (.doc) atau cetak ke PDF dengan kop surat dan lembar pengesahan rapi.</p>
+          </div>
+
+          <!-- Document selector -->
+          <div class="flex items-center gap-2">
+            <select id="export-doc-type" onchange="renderPrintPreview()" class="bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="AME">1. Analisis Minggu Efektif (AME)</option>
+              <option value="PROTA">2. Program Tahunan (PROTA)</option>
+              <option value="PROSEM">3. Program Semester (PROSEM)</option>
+              <option value="ALL">4. Bundel Lengkap (Semua Dokumen)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Action Download Buttons -->
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button onclick="downloadAsWordDoc()" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-file-word text-base"></i> Unduh Format Word (.doc / .docx)
+          </button>
+          <button onclick="triggerPrintPDF()" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-file-pdf text-base"></i> Cetak / Simpan PDF Resmi
+          </button>
+          <button onclick="renderPrintPreview()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition">
+            <i class="fa-solid fa-arrows-rotate"></i> Muat Ulang Pratinjau
+          </button>
+        </div>
+
+        <!-- Pratinjau Dokumen Kontainer -->
+        <div class="mt-6 border border-slate-300 rounded-xl p-4 sm:p-8 bg-slate-100 shadow-inner">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-eye text-indigo-600"></i> Pratinjau Dokumen Siap Cetak (A4 Standard)
+          </div>
+          <!-- Printable Sheet Area -->
+          <div id="print-area" class="bg-white mx-auto shadow-md rounded-lg p-6 sm:p-10 max-w-4xl border border-slate-300 text-slate-900 text-xs sm:text-sm">
+            <!-- Dynamic Preview Content Populated Here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="modal-user" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+          <i class="fa-brands fa-google text-indigo-600"></i> Akun Belajar.id (Tersimpan Permanen)
+        </h3>
+        <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-4">
+        <div class="p-3.5 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-sm">
+            <span id="modal-avatar-initial">G</span>
+          </div>
+          <div class="flex-grow">
+            <div id="modal-user-name" class="font-bold text-slate-800 text-sm">-</div>
+            <div id="modal-user-email" class="text-xs text-indigo-600">-</div>
+            <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">
+              Verified Google Workspace for Education
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Daftar Akun Tersimpan di Perangkat Ini:</label>
+          <div id="modal-user-list" class="space-y-2 text-xs max-h-48 overflow-y-auto custom-scroll pr-1">
+            <!-- Dynamically populated with all registered accounts -->
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex justify-between items-center">
+          <button onclick="performLogout(); closeUserModal();" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-xl">
+            <i class="fa-solid fa-power-off mr-1"></i> Logout
+          </button>
+          <button onclick="closeUserModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-prota" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <h3 id="modal-prota-title" class="font-bold text-slate-800 text-base">Tambah Materi / Bab PROTA</h3>
+        <button onclick="closeProtaModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-prota" onsubmit="saveProtaItem(event)" class="mt-4 space-y-4 text-xs">
+        <input type="hidden" id="modal-prota-id">
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Semester <span class="text-rose-500">*</span></label>
+          <select id="modal-prota-semester" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="Ganjil">Semester Ganjil</option>
+            <option value="Genap">Semester Genap</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Elemen Capaian Pembelajaran <span class="text-rose-500">*</span></label>
+          <input type="text" id="modal-prota-elemen" required placeholder="Contoh: Menyimak / Membaca dan Memirsa" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Materi Pokok / Tujuan Pembelajaran <span class="text-rose-500">*</span></label>
+          <textarea id="modal-prota-materi" required rows="3" placeholder="Tuliskan nama bab atau kompetensi pokok pembelajaran..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Alokasi Jam Pelajaran (JP) <span class="text-rose-500">*</span></label>
+          <input type="number" id="modal-prota-jp" required min="1" max="100" value="18" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 font-bold text-indigo-700">
+          <p class="text-[11px] text-slate-400 mt-1">Harus kelipatan jam tatap muka mingguan agar mudah terbagi di PROSEM.</p>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex justify-end gap-2">
+          <button type="button" onclick="closeProtaModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow">Simpan Materi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL EDIT GURU DI REKAP -->
+  <div id="modal-edit-guru" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+          <i class="fa-solid fa-user-pen text-indigo-600"></i> Edit Data Guru Terdaftar
+        </h3>
+        <button onclick="closeEditGuruModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-edit-guru" onsubmit="saveEditedGuru(event)" class="mt-4 space-y-3.5 text-xs">
+        <input type="hidden" id="edit-guru-uid">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Nama Lengkap & Gelar <span class="text-rose-500">*</span></label>
+            <input type="text" id="edit-guru-nama" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Email Belajar.id <span class="text-rose-500">*</span></label>
+            <input type="email" id="edit-guru-email" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Jenjang Sekolah</label>
+            <select id="edit-guru-jenjang" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="SMA">SMA</option>
+              <option value="SMK">SMK</option>
+              <option value="SLB">SLB</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Status Sekolah</label>
+            <select id="edit-guru-status" onchange="handleEditModalStatusChange(this.value)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="NEGERI">NEGERI</option>
+              <option value="SWASTA">SWASTA</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Nama Sekolah <span class="text-rose-500">*</span></label>
+          <input type="text" id="edit-guru-sekolah" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">NIP</label>
+            <input type="text" id="edit-guru-nip" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">NUPTK</label>
+            <input type="text" id="edit-guru-nuptk" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Mata Pelajaran <span class="text-rose-500">*</span></label>
+          <input type="text" id="edit-guru-mapel" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex justify-end gap-2">
+          <button type="button" onclick="closeEditGuruModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI HAPUS GURU -->
+  <div id="modal-delete-guru" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center gap-3 text-rose-600 pb-3 border-b border-slate-200">
+        <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-lg flex-shrink-0">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 text-base">Hapus Akun Guru Terdaftar?</h3>
+          <p class="text-xs text-slate-500">Tindakan ini tidak dapat dibatalkan.</p>
+        </div>
+      </div>
+
+      <div class="mt-4 text-xs text-slate-600 space-y-2">
+        <p>Apakah Anda yakin ingin menghapus data guru <strong id="delete-guru-target-name" class="text-slate-900"></strong> beserta seluruh data AME, PROTA, dan PROSEM miliknya?</p>
+        <input type="hidden" id="delete-guru-uid">
+      </div>
+
+      <div class="mt-6 pt-3 border-t border-slate-200 flex justify-end gap-2">
+        <button type="button" onclick="closeDeleteGuruModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl">Batal</button>
+        <button type="button" onclick="confirmDeleteGuru()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl shadow flex items-center gap-1.5">
+          <i class="fa-solid fa-trash-can"></i> Ya, Hapus Permanen
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 text-xs sm:text-sm border border-slate-700">
+      <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+      <span id="toast-message">Data berhasil disimpan!</span>
+    </div>
+  </div>
+
+  <script>
+    // ==================== KONFIGURASI PENYIMPANAN BERSIH (TANPA DATA DEMO) ====================
+    const STORAGE_KEY = 'administrasi_guru_generator_clean_v1';
+
+    // Bersihkan sisa penyimpanan versi lama yang masih mengandung data demo
+    ['administrasi_guru_generator_db_v1', 'administrasi_guru_generator_db_v2'].forEach(oldKey => {
+      try { localStorage.removeItem(oldKey); } catch (e) {}
+    });
+
+    const defaultAppState = {
+      currentUser: null,
+      isLoggedIn: false,
+      users: {}
+    };
+
+    let appState = null;
+
+    function loadAppState() {
+      const mergedUsers = {};
+      let savedCurrentUser = null;
+      let savedIsLoggedIn = false;
+
+      // Layer 1: window.name
+      try {
+        if (window.name && window.name.startsWith('AGG_CLEAN:')) {
+          const parsedWin = JSON.parse(window.name.slice(10));
+          if (parsedWin && parsedWin.users) {
+            Object.assign(mergedUsers, parsedWin.users);
+            if (parsedWin.currentUser) savedCurrentUser = parsedWin.currentUser;
+            if (typeof parsedWin.isLoggedIn === 'boolean') savedIsLoggedIn = parsedWin.isLoggedIn;
+          }
+        }
+      } catch (e) {}
+
+      // Layer 2: localStorage
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.users) {
+            Object.assign(mergedUsers, parsed.users);
+            if (parsed.currentUser) savedCurrentUser = parsed.currentUser;
+            if (typeof parsed.isLoggedIn === 'boolean') savedIsLoggedIn = parsed.isLoggedIn;
+          }
+        }
+      } catch (e) {}
+
+      // Layer 3: Active memory
+      if (appState && appState.users) {
+        Object.assign(mergedUsers, appState.users);
+      }
+
+      const userKeys = Object.keys(mergedUsers);
+      const validCurrent = mergedUsers[savedCurrentUser] ? savedCurrentUser : (userKeys[0] || null);
+
+      return {
+        currentUser: validCurrent,
+        isLoggedIn: Boolean(savedIsLoggedIn && validCurrent),
+        users: mergedUsers
+      };
+    }
+
+    function saveAppState() {
+      const serialized = JSON.stringify(appState);
+      try {
+        localStorage.setItem(STORAGE_KEY, serialized);
+      } catch (err) {}
+      try {
+        window.name = 'AGG_CLEAN:' + serialized;
+      } catch (err) {}
+    }
+
+    function normalizeCredential(str) {
+      return (str || '').replace(/[\s\u200B-\u200D\uFEFF]/g, '').toLowerCase();
+    }
+
+    appState = loadAppState();
+    saveAppState();
+
+    let activeAMESemester = 'ganjil';
+    let activeProsemSemester = 'ganjil';
+
+    // ==================== HELPER & TOAST ====================
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      const icon = document.getElementById('toast-icon');
+      const text = document.getElementById('toast-message');
+      if (!toast || !icon || !text) return;
+
+      text.textContent = msg;
+      icon.className = type === 'error'
+        ? 'fa-solid fa-circle-exclamation text-rose-400 text-base'
+        : type === 'warning'
+        ? 'fa-solid fa-triangle-exclamation text-amber-400 text-base'
+        : 'fa-solid fa-circle-check text-emerald-400 text-base';
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    function getCurrentUser() {
+      if (!appState || !appState.users || !appState.currentUser) return null;
+      return appState.users[appState.currentUser] || Object.values(appState.users)[0] || null;
+    }
+
+    // ==================== AUTHENTICATION & LOGIN ====================
+    function renderLoginSavedAccounts() {
+      const wrapper = document.getElementById('login-saved-accounts-wrapper');
+      const container = document.getElementById('login-saved-accounts-list');
+      if (!wrapper || !container || !appState || !appState.users) return;
+
+      const entries = Object.entries(appState.users);
+      if (entries.length === 0) {
+        wrapper.classList.add('hidden');
+        container.innerHTML = '';
+        return;
+      }
+
+      wrapper.classList.remove('hidden');
+      container.innerHTML = entries.map(([uid, u]) => `
+        <button type="button" onclick="quickLogin('${uid}')" class="p-2 border border-slate-200 rounded-xl hover:bg-indigo-50/70 hover:border-indigo-300 text-left transition flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="font-bold text-slate-800 truncate">${u.profile.nama}</div>
+            <div class="text-[10px] text-indigo-600 truncate">${u.email}</div>
+          </div>
+          <span class="px-2 py-0.5 rounded-lg bg-indigo-100 text-indigo-700 text-[10px] font-bold flex-shrink-0">Masuk</span>
+        </button>
+      `).join('');
+    }
+
+    function switchAuthBox(mode) {
+      document.getElementById('auth-box-login').classList.toggle('hidden', mode !== 'login');
+      document.getElementById('auth-box-register').classList.toggle('hidden', mode !== 'register');
+      document.getElementById('auth-box-reset').classList.toggle('hidden', mode !== 'reset');
+      if (mode === 'login') renderLoginSavedAccounts();
+    }
+
+    function isBelajarId(email) {
+      const clean = normalizeCredential(email);
+      return /^[a-z0-9._%+-]+@([a-z0-9-]+\.)*belajar\.id$/.test(clean);
+    }
+
+    function handleLoginSubmit(event) {
+      event.preventDefault();
+      const rawInput = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      const cleanInput = normalizeCredential(rawInput);
+
+      appState = loadAppState();
+
+      let matchedKey = null;
+      for (const [key, userObj] of Object.entries(appState.users)) {
+        const userEmailClean = normalizeCredential(userObj.email);
+        const usernameOnly = userEmailClean.split('@')[0];
+        if (userEmailClean === cleanInput || usernameOnly === cleanInput) {
+          matchedKey = key;
+          break;
+        }
+      }
+
+      if (!matchedKey) {
+        showToast('Akun Belajar.id belum terdaftar. Silakan klik "Daftar Akun Belajar.id" terlebih dahulu.', 'error');
+        return;
+      }
+
+      const user = appState.users[matchedKey];
+      if (user.password !== password) {
+        showToast('Kata sandi yang Anda masukkan salah!', 'error');
+        return;
+      }
+
+      appState.currentUser = matchedKey;
+      appState.isLoggedIn = true;
+      saveAppState();
+
+      document.getElementById('auth-screen').classList.add('hidden');
+      initAppForCurrentUser();
+      showToast(`Selamat datang, ${user.profile.nama}!`);
+    }
+
+    function quickLogin(userKey) {
+      appState = loadAppState();
+      if (!appState.users[userKey]) {
+        showToast('Akun tidak ditemukan.', 'error');
+        return;
+      }
+      appState.currentUser = userKey;
+      appState.isLoggedIn = true;
+      saveAppState();
+
+      document.getElementById('auth-screen').classList.add('hidden');
+      initAppForCurrentUser();
+      showToast(`Masuk sebagai ${appState.users[userKey].profile.nama}`);
+    }
+
+    function handleRegisterSubmit(event) {
+      event.preventDefault();
+      const nama = document.getElementById('reg-name').value.trim();
+      const emailRaw = document.getElementById('reg-email').value.trim();
+      const email = normalizeCredential(emailRaw);
+      const mapel = document.getElementById('reg-mapel').value.trim();
+      const password = document.getElementById('reg-password').value;
+
+      if (!isBelajarId(email)) {
+        showToast('Pendaftaran ditolak! Wajib menggunakan email resmi berakhiran .belajar.id', 'error');
+        return;
+      }
+
+      appState = loadAppState();
+
+      const existingEntry = Object.entries(appState.users).find(([, u]) => normalizeCredential(u.email) === email);
+      if (existingEntry) {
+        const [existKey, existUser] = existingEntry;
+        existUser.password = password;
+        existUser.profile.nama = nama;
+        existUser.profile.mapel = mapel;
+        appState.currentUser = existKey;
+        appState.isLoggedIn = true;
+        saveAppState();
+
+        document.getElementById('form-register').reset();
+        switchAuthBox('login');
+        document.getElementById('auth-screen').classList.add('hidden');
+        initAppForCurrentUser();
+        showToast('Akun Belajar.id berhasil diperbarui & masuk otomatis!');
+        return;
+      }
+
+      const uid = 'guru_' + Date.now();
+      let detectedJenjang = 'SMA';
+      if (email.includes('.smk.')) detectedJenjang = 'SMK';
+      else if (email.includes('.slb.')) detectedJenjang = 'SLB';
+
+      appState.users[uid] = {
+        email: email,
+        password: password,
+        profile: {
+          statusSekolah: 'NEGERI',
+          jenjang: detectedJenjang,
+          sekolah: 'Belum Diisi (Silakan Lengkapi Profil)',
+          nama: nama,
+          nip: '',
+          nuptk: '',
+          mapel: mapel,
+          fase: 'Fase E (Kelas X)',
+          tp: '2025/2026',
+          kepsek: '-',
+          nipKepsek: '-',
+          titimangsa: 'Indonesia, Juli 2025'
+        },
+        ame: {
+          jpPerWeek: 3,
+          ganjil: [
+            { bulan: 'Juli', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'Agustus', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'September', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'Oktober', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'November', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'Desember', kalender: 0, nonEff: 0, ket: '' }
+          ],
+          genap: [
+            { bulan: 'Januari', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'Februari', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'Maret', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'April', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'Mei', kalender: 0, nonEff: 0, ket: '' },
+            { bulan: 'Juni', kalender: 0, nonEff: 0, ket: '' }
+          ]
+        },
+        prota: [],
+        prosemGanjilDist: {},
+        prosemGenapDist: {}
+      };
+
+      appState.currentUser = uid;
+      appState.isLoggedIn = true;
+      saveAppState();
+
+      document.getElementById('form-register').reset();
+      switchAuthBox('login');
+      document.getElementById('auth-screen').classList.add('hidden');
+      initAppForCurrentUser();
+      showToast('Akun Belajar.id berhasil didaftarkan & tersimpan permanen!');
+    }
+
+    function handleResetSubmit(event) {
+      event.preventDefault();
+      const email = normalizeCredential(document.getElementById('reset-email').value);
+      const newPassword = document.getElementById('reset-new-password').value;
+
+      appState = loadAppState();
+
+      let foundKey = null;
+      for (const [k, u] of Object.entries(appState.users)) {
+        if (normalizeCredential(u.email) === email) {
+          foundKey = k;
+          break;
+        }
+      }
+
+      if (!foundKey) {
+        showToast('Email Belajar.id tidak ditemukan dalam daftar akun terdaftar.', 'error');
+        return;
+      }
+
+      appState.users[foundKey].password = newPassword;
+      saveAppState();
+
+      document.getElementById('form-reset').reset();
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = newPassword;
+      switchAuthBox('login');
+      showToast('Kata sandi baru berhasil disimpan! Silakan login.');
+    }
+
+    function performLogout() {
+      const activeUser = getCurrentUser();
+      if (activeUser) {
+        document.getElementById('login-email').value = activeUser.email;
+        document.getElementById('login-password').value = activeUser.password;
+      } else {
+        document.getElementById('login-email').value = '';
+        document.getElementById('login-password').value = '';
+      }
+      appState.isLoggedIn = false;
+      saveAppState();
+      renderLoginSavedAccounts();
+      switchAuthBox('login');
+      document.getElementById('auth-screen').classList.remove('hidden');
+      showToast('Anda telah keluar dari sesi.');
+    }
+
+    // ==================== NAVIGATION & VIEW SWITCHING ====================
+    function switchTab(tabName) {
+      const views = ['dashboard', 'profile', 'ame', 'prota', 'prosem', 'export'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        const btn = document.getElementById(`tab-btn-${v}`);
+        if (el) el.classList.toggle('hidden', v !== tabName);
+        if (btn) {
+          if (v === tabName) {
+            btn.className = 'tab-btn px-3 py-2 rounded-lg text-indigo-700 bg-indigo-50 flex items-center gap-2 transition whitespace-nowrap font-bold';
+          } else {
+            btn.className = 'tab-btn px-3 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 flex items-center gap-2 transition whitespace-nowrap';
+          }
+        }
+      });
+
+      if (tabName === 'dashboard') updateDashboardUI();
+      if (tabName === 'profile') populateProfileForm();
+      if (tabName === 'ame') renderAMETable();
+      if (tabName === 'prota') renderProtaTable();
+      if (tabName === 'prosem') renderProsemTable();
+      if (tabName === 'export') renderPrintPreview();
+    }
+
+    function scrollToRekapGuru() {
+      const el = document.getElementById('section-rekap-guru');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ==================== CALCULATIONS & AME ====================
+    function getAMEStats(userObj) {
+      const user = userObj || getCurrentUser();
+      if (!user) {
+        return { jpPerWeek: 3, ganjilKal: 0, ganjilNon: 0, ganjilEff: 0, ganjilJP: 0, genapKal: 0, genapNon: 0, genapEff: 0, genapJP: 0, totalEffWeeks: 0, totalJP: 0 };
+      }
+      const ame = user.ame;
+      const jpPerWeek = parseInt(ame.jpPerWeek) || 3;
+
+      let ganjilKal = 0, ganjilNon = 0, ganjilEff = 0;
+      ame.ganjil.forEach(m => {
+        const k = parseInt(m.kalender) || 0;
+        const n = Math.min(k, parseInt(m.nonEff) || 0);
+        const eff = Math.max(0, k - n);
+        ganjilKal += k;
+        ganjilNon += n;
+        ganjilEff += eff;
+      });
+
+      let genapKal = 0, genapNon = 0, genapEff = 0;
+      ame.genap.forEach(m => {
+        const k = parseInt(m.kalender) || 0;
+        const n = Math.min(k, parseInt(m.nonEff) || 0);
+        const eff = Math.max(0, k - n);
+        genapKal += k;
+        genapNon += n;
+        genapEff += eff;
+      });
+
+      const ganjilJP = ganjilEff * jpPerWeek;
+      const genapJP = genapEff * jpPerWeek;
+      const totalEffWeeks = ganjilEff + genapEff;
+      const totalJP = ganjilJP + genapJP;
+
+      return {
+        jpPerWeek,
+        ganjilKal, ganjilNon, ganjilEff, ganjilJP,
+        genapKal, genapNon, genapEff, genapJP,
+        totalEffWeeks, totalJP
+      };
+    }
+
+    function switchAMESemester(sem) {
+      activeAMESemester = sem;
+      const btnGanjil = document.getElementById('ame-tab-btn-ganjil');
+      const btnGenap = document.getElementById('ame-tab-btn-genap');
+      if (sem === 'ganjil') {
+        btnGanjil.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-700 flex items-center gap-2';
+        btnGenap.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-indigo-600 flex items-center gap-2';
+      } else {
+        btnGenap.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-700 flex items-center gap-2';
+        btnGanjil.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-indigo-600 flex items-center gap-2';
+      }
+      renderAMETable();
+    }
+
+    function renderAMETable() {
+      const user = getCurrentUser();
+      if (!user) return;
+      document.getElementById('ame-jp-per-week').value = user.ame.jpPerWeek;
+      const rows = user.ame[activeAMESemester];
+      const jpPerWeek = parseInt(user.ame.jpPerWeek) || 3;
+      const tbody = document.getElementById('ame-table-body');
+
+      let semKal = 0, semNon = 0, semEff = 0, semJP = 0;
+
+      tbody.innerHTML = rows.map((row, idx) => {
+        const k = parseInt(row.kalender) || 0;
+        const n = Math.min(k, parseInt(row.nonEff) || 0);
+        const eff = Math.max(0, k - n);
+        const jp = eff * jpPerWeek;
+
+        semKal += k;
+        semNon += n;
+        semEff += eff;
+        semJP += jp;
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-2.5 px-3 text-center font-medium text-slate-500">${idx + 1}</td>
+            <td class="py-2.5 px-4 font-semibold text-slate-800">${row.bulan}</td>
+            <td class="py-2.5 px-4 text-center">
+              <input type="number" min="0" max="6" value="${k}" onchange="updateAMERow(${idx}, 'kalender', this.value)"
+                class="w-16 text-center bg-slate-50 border border-slate-300 rounded-lg py-1 font-semibold focus:ring-2 focus:ring-indigo-500 outline-none">
+            </td>
+            <td class="py-2.5 px-4 text-center">
+              <input type="number" min="0" max="6" value="${n}" onchange="updateAMERow(${idx}, 'nonEff', this.value)"
+                class="w-16 text-center bg-slate-50 border border-slate-300 rounded-lg py-1 font-semibold text-rose-600 focus:ring-2 focus:ring-indigo-500 outline-none">
+            </td>
+            <td class="py-2.5 px-4">
+              <input type="text" value="${row.ket || ''}" placeholder="Catatan agenda..." onchange="updateAMERow(${idx}, 'ket', this.value)"
+                class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs focus:ring-2 focus:ring-indigo-500 outline-none">
+            </td>
+            <td class="py-2.5 px-4 text-center font-bold bg-indigo-50/60 text-indigo-800">${eff} Mgg</td>
+            <td class="py-2.5 px-4 text-center font-bold bg-emerald-50/60 text-emerald-800">${jp} JP</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('ame-total-kalender').textContent = semKal;
+      document.getElementById('ame-total-non-eff').textContent = semNon;
+      document.getElementById('ame-total-eff').textContent = semEff;
+      document.getElementById('ame-total-jp').textContent = `${semJP} JP`;
+
+      const stats = getAMEStats(user);
+      document.getElementById('ame-badge-ganjil').textContent = `${stats.ganjilJP} JP (${stats.ganjilEff} Minggu)`;
+      document.getElementById('ame-badge-genap').textContent = `${stats.genapJP} JP (${stats.genapEff} Minggu)`;
+      document.getElementById('ame-badge-total').textContent = `${stats.totalJP} JP (${stats.totalEffWeeks} Mgg)`;
+
+      const compBadge = document.getElementById('ame-badge-compliance');
+      if (stats.totalEffWeeks === 36) {
+        compBadge.className = 'mt-1 inline-flex items-center justify-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full';
+        compBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> Sesuai Asumsi 36 Minggu';
+      } else {
+        const diff = stats.totalEffWeeks - 36;
+        const sign = diff > 0 ? `+${diff}` : `${diff}`;
+        compBadge.className = 'mt-1 inline-flex items-center justify-center gap-1 text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full';
+        compBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Selisih ${sign} Mgg dari 36`;
+      }
+    }
+
+    function updateAMERow(idx, field, val) {
+      const user = getCurrentUser();
+      if (!user) return;
+      if (field === 'ket') {
+        user.ame[activeAMESemester][idx].ket = val;
+      } else {
+        user.ame[activeAMESemester][idx][field] = Math.max(0, parseInt(val) || 0);
+      }
+      saveAppState();
+      renderAMETable();
+      updateDashboardUI();
+    }
+
+    function updateAMEComputations() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const val = parseInt(document.getElementById('ame-jp-per-week').value) || 3;
+      user.ame.jpPerWeek = Math.max(1, val);
+      saveAppState();
+      renderAMETable();
+      updateDashboardUI();
+      showToast(`Beban mengajar diperbarui menjadi ${user.ame.jpPerWeek} JP/Minggu.`);
+    }
+
+    function syncToPermendikdasmenStandard() {
+      const user = getCurrentUser();
+      if (!user) return;
+      user.ame.ganjil = [
+        { bulan: 'Juli', kalender: 4, nonEff: 2, ket: 'Libur Akhir TP & MPLS' },
+        { bulan: 'Agustus', kalender: 5, nonEff: 1, ket: 'KBM Efektif & Peringatan HUT RI' },
+        { bulan: 'September', kalender: 4, nonEff: 1, ket: 'Penilaian Sumatif Tengah Semester' },
+        { bulan: 'Oktober', kalender: 5, nonEff: 1, ket: 'KBM Efektif & Kokurikuler P5' },
+        { bulan: 'November', kalender: 4, nonEff: 0, ket: 'KBM Efektif Tatap Muka Penuh' },
+        { bulan: 'Desember', kalender: 4, nonEff: 3, ket: 'Sumatif Akhir Sem. & Libur Sem.' }
+      ];
+      user.ame.genap = [
+        { bulan: 'Januari', kalender: 5, nonEff: 1, ket: 'Awal Masuk Semester Genap' },
+        { bulan: 'Februari', kalender: 4, nonEff: 0, ket: 'KBM Efektif Tatap Muka' },
+        { bulan: 'Maret', kalender: 4, nonEff: 1, ket: 'PSTS & Libur Awal Ramadhan' },
+        { bulan: 'April', kalender: 4, nonEff: 2, ket: 'Libur Hari Raya Idul Fitri' },
+        { bulan: 'Mei', kalender: 5, nonEff: 1, ket: 'KBM Efektif & Asesmen Akhir' },
+        { bulan: 'Juni', kalender: 4, nonEff: 3, ket: 'Sumatif Akhir Thn & Libur Semester' }
+      ];
+      saveAppState();
+      renderAMETable();
+      updateDashboardUI();
+      showToast('Kalender AME disinkronkan ke standar 36 Minggu Efektif (Permendikdasmen No. 13/2026).');
+    }
+
+    function processKalenderPendidikan(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      syncToPermendikdasmenStandard();
+      const box = document.getElementById('status-analisis-kalender');
+      document.getElementById('kalender-filename').textContent = file.name;
+      box.classList.remove('hidden');
+      box.classList.add('flex');
+      showToast(`Kalender "${file.name}" berhasil dianalisis AI menjadi 36 Minggu Efektif!`);
+    }
+
+    function processStrukturKurikulum(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const user = getCurrentUser();
+      if (!user) return;
+      const mapelLower = (user.profile.mapel || '').toLowerCase();
+      let detectedJP = 3;
+      if (mapelLower.includes('matematika') || mapelLower.includes('inggris') || mapelLower.includes('kejuruan')) detectedJP = 4;
+      else if (mapelLower.includes('agama') || mapelLower.includes('pancasila') || mapelLower.includes('seni') || mapelLower.includes('sejarah')) detectedJP = 2;
+
+      user.ame.jpPerWeek = detectedJP;
+      saveAppState();
+      renderAMETable();
+      updateDashboardUI();
+
+      const box = document.getElementById('status-analisis-kurikulum');
+      document.getElementById('kurikulum-filename').textContent = file.name;
+      document.getElementById('kurikulum-result-text').textContent = `Terdeteksi: ${detectedJP} JP / Minggu`;
+      box.classList.remove('hidden');
+      box.classList.add('flex');
+      showToast(`Struktur Kurikulum Permendikdasmen 13/2026 terdeteksi: ${detectedJP} JP/Minggu.`);
+    }
+
+    // ==================== PROFILE MANAGEMENT ====================
+    function handleSchoolStatusChange(status) {
+      const nipInput = document.getElementById('prof-nip');
+      const statusHint = document.getElementById('prof-status-hint');
+      const nipTag = document.getElementById('prof-nip-status-tag');
+      const nipDesc = document.getElementById('prof-nip-desc');
+
+      if (status === 'SWASTA') {
+        nipInput.value = '-';
+        nipInput.disabled = true;
+        nipInput.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+        statusHint.textContent = 'Status Swasta dipilih: Field NIP dinonaktifkan otomatis.';
+        statusHint.className = 'text-[11px] text-amber-600 mt-1 font-medium';
+        nipTag.textContent = 'Nonaktif (Swasta)';
+        nipTag.className = 'text-[10px] px-2 py-0.5 rounded font-semibold bg-slate-200 text-slate-600';
+        nipDesc.textContent = 'Guru sekolah swasta menggunakan NUPTK sebagai identitas utama.';
+      } else {
+        if (nipInput.value === '-') nipInput.value = '';
+        nipInput.disabled = false;
+        nipInput.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+        statusHint.textContent = 'Status Negeri dipilih: Field NIP diaktifkan.';
+        statusHint.className = 'text-[11px] text-emerald-600 mt-1 font-medium';
+        nipTag.textContent = 'Aktif (Negeri)';
+        nipTag.className = 'text-[10px] px-2 py-0.5 rounded font-semibold bg-emerald-100 text-emerald-800';
+        nipDesc.textContent = 'Wajib bagi Guru ASN (PNS/PPPK) di sekolah negeri.';
+      }
+    }
+
+    function populateProfileForm() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const p = user.profile;
+      document.getElementById('prof-jenjang').value = p.jenjang || 'SMA';
+      document.getElementById('prof-status-sekolah').value = p.statusSekolah || 'NEGERI';
+      document.getElementById('prof-sekolah').value = p.sekolah || '';
+      document.getElementById('prof-nama').value = p.nama || '';
+      document.getElementById('prof-nip').value = p.nip || '';
+      document.getElementById('prof-nuptk').value = p.nuptk || '';
+      document.getElementById('prof-mapel').value = p.mapel || '';
+      document.getElementById('prof-fase').value = p.fase || 'Fase E (Kelas X)';
+      document.getElementById('prof-tp').value = p.tp || '2025/2026';
+      document.getElementById('prof-kepsek').value = p.kepsek || '';
+      document.getElementById('prof-nip-kepsek').value = p.nipKepsek || '';
+      document.getElementById('prof-titimangsa').value = p.titimangsa || '';
+      handleSchoolStatusChange(p.statusSekolah || 'NEGERI');
+    }
+
+    function saveProfile(event) {
+      event.preventDefault();
+      const user = getCurrentUser();
+      if (!user) return;
+      const statusSekolah = document.getElementById('prof-status-sekolah').value;
+      user.profile = {
+        jenjang: document.getElementById('prof-jenjang').value,
+        statusSekolah: statusSekolah,
+        sekolah: document.getElementById('prof-sekolah').value.trim(),
+        nama: document.getElementById('prof-nama').value.trim(),
+        nip: statusSekolah === 'SWASTA' ? '-' : (document.getElementById('prof-nip').value.trim() || '-'),
+        nuptk: document.getElementById('prof-nuptk').value.trim() || '-',
+        mapel: document.getElementById('prof-mapel').value.trim(),
+        fase: document.getElementById('prof-fase').value,
+        tp: document.getElementById('prof-tp').value.trim(),
+        kepsek: document.getElementById('prof-kepsek').value.trim(),
+        nipKepsek: document.getElementById('prof-nip-kepsek').value.trim() || '-',
+        titimangsa: document.getElementById('prof-titimangsa').value.trim()
+      };
+      saveAppState();
+      updateNavbarAndDashboard();
+      showToast('Profil Sekolah & Guru berhasil disimpan permanen!');
+    }
+
+    // ==================== PROTA MANAGEMENT ====================
+    function renderProtaTable() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const stats = getAMEStats(user);
+      const targetJP = stats.totalJP;
+      let allocatedJP = 0;
+
+      const tbody = document.getElementById('prota-table-body');
+      if (!user.prota || user.prota.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400 italic">Belum ada materi PROTA. Klik tombol "Tambah Materi / Bab" di atas untuk memulai.</td></tr>`;
+      } else {
+        tbody.innerHTML = user.prota.map((item, idx) => {
+          const jp = parseInt(item.jp) || 0;
+          allocatedJP += jp;
+          const badgeSem = item.semester === 'Ganjil'
+            ? 'bg-indigo-100 text-indigo-800'
+            : 'bg-sky-100 text-sky-800';
+          return `
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-3 text-center font-medium text-slate-500">${idx + 1}</td>
+              <td class="py-3 px-3 text-center">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badgeSem}">${item.semester}</span>
+              </td>
+              <td class="py-3 px-4 font-medium text-slate-700">${item.elemen}</td>
+              <td class="py-3 px-4 text-slate-800">${item.materi}</td>
+              <td class="py-3 px-4 text-center font-bold bg-indigo-50/60 text-indigo-900">${jp} JP</td>
+              <td class="py-3 px-3 text-center no-print">
+                <div class="flex items-center justify-center gap-1.5">
+                  <button onclick="openEditProtaModal('${item.id}')" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg" title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button onclick="deleteProtaItem('${item.id}')" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg" title="Hapus">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('prota-target-display').textContent = `${targetJP} JP`;
+      document.getElementById('prota-total-allocated').textContent = allocatedJP;
+      document.getElementById('prota-total-target').textContent = targetJP;
+      document.getElementById('prota-footer-total').textContent = `${allocatedJP} JP`;
+
+      const pct = targetJP > 0 ? Math.min(100, Math.round((allocatedJP / targetJP) * 100)) : 0;
+      const bar = document.getElementById('prota-progress-bar');
+      const tag = document.getElementById('prota-status-tag');
+      const msg = document.getElementById('prota-alert-msg');
+
+      bar.style.width = `${pct}%`;
+      if (targetJP > 0 && allocatedJP === targetJP) {
+        bar.className = 'bg-emerald-500 h-3 rounded-full transition-all duration-300';
+        tag.className = 'px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800';
+        tag.textContent = 'Tepat 100% (Seimbang)';
+        msg.className = 'mt-2 text-[11px] text-emerald-700 flex items-center gap-1 font-medium';
+        msg.innerHTML = '<i class="fa-solid fa-check-circle"></i> Alokasi jam di Program Tahunan telah sesuai 100% dengan pagu AME.';
+      } else if (allocatedJP > targetJP) {
+        bar.className = 'bg-rose-500 h-3 rounded-full transition-all duration-300';
+        tag.className = 'px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800';
+        tag.textContent = `Melebihi Pagu (+${allocatedJP - targetJP} JP)`;
+        msg.className = 'mt-2 text-[11px] text-rose-700 flex items-center gap-1 font-medium';
+        msg.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Total alokasi melebihi pagu AME sebesar ${allocatedJP - targetJP} JP. Silakan kurangi JP materi.`;
+      } else {
+        bar.className = 'bg-amber-500 h-3 rounded-full transition-all duration-300';
+        tag.className = 'px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800';
+        tag.textContent = `Belum Penuh (Sisa ${Math.max(0, targetJP - allocatedJP)} JP)`;
+        msg.className = 'mt-2 text-[11px] text-amber-700 flex items-center gap-1 font-medium';
+        msg.innerHTML = `<i class="fa-solid fa-circle-info"></i> Masih tersisa ${Math.max(0, targetJP - allocatedJP)} JP dari pagu AME yang belum dialokasikan.`;
+      }
+    }
+
+    function openAddProtaModal() {
+      const user = getCurrentUser();
+      if (!user) return;
+      document.getElementById('modal-prota-title').textContent = 'Tambah Materi / Bab PROTA';
+      document.getElementById('modal-prota-id').value = '';
+      document.getElementById('modal-prota-semester').value = 'Ganjil';
+      document.getElementById('modal-prota-elemen').value = '';
+      document.getElementById('modal-prota-materi').value = '';
+      document.getElementById('modal-prota-jp').value = user.ame.jpPerWeek * 6;
+      document.getElementById('modal-prota').classList.remove('hidden');
+      document.getElementById('modal-prota').classList.add('flex');
+    }
+
+    function openEditProtaModal(id) {
+      const user = getCurrentUser();
+      if (!user) return;
+      const item = user.prota.find(p => p.id === id);
+      if (!item) return;
+      document.getElementById('modal-prota-title').textContent = 'Edit Materi / Bab PROTA';
+      document.getElementById('modal-prota-id').value = item.id;
+      document.getElementById('modal-prota-semester').value = item.semester;
+      document.getElementById('modal-prota-elemen').value = item.elemen;
+      document.getElementById('modal-prota-materi').value = item.materi;
+      document.getElementById('modal-prota-jp').value = item.jp;
+      document.getElementById('modal-prota').classList.remove('hidden');
+      document.getElementById('modal-prota').classList.add('flex');
+    }
+
+    function closeProtaModal() {
+      document.getElementById('modal-prota').classList.add('hidden');
+      document.getElementById('modal-prota').classList.remove('flex');
+    }
+
+    function saveProtaItem(event) {
+      event.preventDefault();
+      const user = getCurrentUser();
+      if (!user) return;
+      const id = document.getElementById('modal-prota-id').value;
+      const newObj = {
+        id: id || ('prota_' + Date.now()),
+        semester: document.getElementById('modal-prota-semester').value,
+        elemen: document.getElementById('modal-prota-elemen').value.trim(),
+        materi: document.getElementById('modal-prota-materi').value.trim(),
+        jp: Math.max(1, parseInt(document.getElementById('modal-prota-jp').value) || 1)
+      };
+
+      if (id) {
+        const idx = user.prota.findIndex(p => p.id === id);
+        if (idx !== -1) user.prota[idx] = newObj;
+      } else {
+        user.prota.push(newObj);
+      }
+
+      saveAppState();
+      closeProtaModal();
+      renderProtaTable();
+      updateDashboardUI();
+      showToast('Materi PROTA berhasil disimpan!');
+    }
+
+    function deleteProtaItem(id) {
+      const user = getCurrentUser();
+      if (!user) return;
+      user.prota = user.prota.filter(p => p.id !== id);
+      delete user.prosemGanjilDist[id];
+      delete user.prosemGenapDist[id];
+      saveAppState();
+      renderProtaTable();
+      updateDashboardUI();
+      showToast('Materi PROTA telah dihapus.');
+    }
+
+    // ==================== PROSEM MANAGEMENT ====================
+    function switchProsemSemester(sem) {
+      activeProsemSemester = sem;
+      const btnGanjil = document.getElementById('prosem-tab-btn-ganjil');
+      const btnGenap = document.getElementById('prosem-tab-btn-genap');
+      const months = sem === 'ganjil'
+        ? ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+        : ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'];
+
+      months.forEach((m, i) => {
+        const header = document.getElementById(`prosem-m${i + 1}-name`);
+        if (header) header.textContent = m;
+      });
+
+      if (sem === 'ganjil') {
+        btnGanjil.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-700 flex items-center gap-2';
+        btnGenap.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-indigo-600 flex items-center gap-2';
+      } else {
+        btnGenap.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-700 flex items-center gap-2';
+        btnGanjil.className = 'px-5 py-2.5 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-indigo-600 flex items-center gap-2';
+      }
+      renderProsemTable();
+    }
+
+    function renderProsemTable() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const targetSemLabel = activeProsemSemester === 'ganjil' ? 'Ganjil' : 'Genap';
+      const distMap = activeProsemSemester === 'ganjil' ? user.prosemGanjilDist : user.prosemGenapDist;
+      const items = (user.prota || []).filter(p => p.semester === targetSemLabel);
+      const tbody = document.getElementById('prosem-table-body');
+
+      let totalTarget = 0;
+      let totalDist = 0;
+
+      if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="34" class="py-8 text-center font-sans text-slate-400 italic">Belum ada materi PROTA untuk Semester ${targetSemLabel}. Tambahkan di menu PROTA terlebih dahulu.</td></tr>`;
+      } else {
+        tbody.innerHTML = items.map((item, idx) => {
+          const rowArr = distMap[item.id] || Array(30).fill(0);
+          const rowSum = rowArr.reduce((acc, v) => acc + (parseInt(v) || 0), 0);
+          totalTarget += parseInt(item.jp) || 0;
+          totalDist += rowSum;
+
+          const cells = rowArr.map((val, wIdx) => {
+            const v = parseInt(val) || 0;
+            const bg = v > 0 ? 'bg-indigo-100 text-indigo-900 font-bold' : 'bg-white text-slate-400';
+            return `<td class="p-0.5 border-r border-slate-200">
+              <input type="number" min="0" max="10" value="${v || ''}" onchange="updateProsemCell('${item.id}', ${wIdx}, this.value)"
+                class="w-7 h-7 text-center text-[11px] rounded ${bg} outline-none focus:ring-1 focus:ring-indigo-500">
+            </td>`;
+          }).join('');
+
+          const sumColor = rowSum === item.jp ? 'text-emerald-700 bg-emerald-50' : 'text-amber-700 bg-amber-50';
+
+          return `
+            <tr class="hover:bg-slate-50">
+              <td class="p-2 border-r border-slate-200 font-sans text-slate-500">${idx + 1}</td>
+              <td class="p-2 border-r border-slate-200 font-sans text-left text-slate-800 font-medium">${item.materi}</td>
+              <td class="p-2 border-r border-slate-200 font-sans font-bold bg-indigo-50/70 text-indigo-900">${item.jp}</td>
+              ${cells}
+              <td class="p-2 font-sans font-bold ${sumColor}">${rowSum}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('prosem-foot-target').textContent = totalTarget;
+      document.getElementById('prosem-foot-distributed').textContent = totalDist;
+    }
+
+    function updateProsemCell(protaId, weekIdx, val) {
+      const user = getCurrentUser();
+      if (!user) return;
+      const distMap = activeProsemSemester === 'ganjil' ? user.prosemGanjilDist : user.prosemGenapDist;
+      if (!distMap[protaId]) distMap[protaId] = Array(30).fill(0);
+      distMap[protaId][weekIdx] = Math.max(0, parseInt(val) || 0);
+      saveAppState();
+      renderProsemTable();
+      updateDashboardUI();
+    }
+
+    function autoDistributeProsem() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const targetSemLabel = activeProsemSemester === 'ganjil' ? 'Ganjil' : 'Genap';
+      const items = (user.prota || []).filter(p => p.semester === targetSemLabel);
+      if (items.length === 0) {
+        showToast('Tidak ada materi PROTA pada semester ini untuk dibagi.', 'warning');
+        return;
+      }
+
+      const ameMonths = user.ame[activeProsemSemester];
+      const jpPerWeek = parseInt(user.ame.jpPerWeek) || 3;
+
+      const effectiveSlots = [];
+      ameMonths.forEach((m, mIdx) => {
+        const effCount = Math.max(0, (parseInt(m.kalender) || 0) - (parseInt(m.nonEff) || 0));
+        const startSlot = mIdx * 5 + (mIdx === 0 ? 1 : 0);
+        for (let w = 0; w < effCount; w++) {
+          const slot = Math.min(mIdx * 5 + 4, startSlot + w);
+          effectiveSlots.push(slot);
+        }
+      });
+
+      const newDist = {};
+      let slotCursor = 0;
+
+      items.forEach(item => {
+        const arr = Array(30).fill(0);
+        let remaining = parseInt(item.jp) || 0;
+        while (remaining > 0 && effectiveSlots.length > 0) {
+          const slot = effectiveSlots[slotCursor % effectiveSlots.length];
+          const alloc = Math.min(jpPerWeek, remaining);
+          arr[slot] += alloc;
+          remaining -= alloc;
+          slotCursor++;
+        }
+        newDist[item.id] = arr;
+      });
+
+      if (activeProsemSemester === 'ganjil') user.prosemGanjilDist = newDist;
+      else user.prosemGenapDist = newDist;
+
+      saveAppState();
+      renderProsemTable();
+      updateDashboardUI();
+      showToast(`Distribusi JP Semester ${targetSemLabel} berhasil dipetakan otomatis!`);
+    }
+
+    function resetProsemDistribution() {
+      const user = getCurrentUser();
+      if (!user) return;
+      if (activeProsemSemester === 'ganjil') user.prosemGanjilDist = {};
+      else user.prosemGenapDist = {};
+      saveAppState();
+      renderProsemTable();
+      updateDashboardUI();
+      showToast('Distribusi grid PROSEM semester ini direset.');
+    }
+
+    // ==================== DASHBOARD & REKAP GURU TERDAFTAR ====================
+    function updateNavbarAndDashboard() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const p = user.profile;
+
+      document.getElementById('nav-avatar-initial').textContent = (p.nama || 'G').charAt(0).toUpperCase();
+      document.getElementById('nav-user-name').textContent = p.nama;
+      document.getElementById('nav-user-email').textContent = user.email;
+
+      document.getElementById('dash-greeting-name').textContent = p.nama;
+      document.getElementById('dash-tp-badge').textContent = p.tp || '2025/2026';
+      document.getElementById('dash-badge-status-sekolah').textContent = `Sekolah ${p.statusSekolah || 'NEGERI'}`;
+
+      updateDashboardUI();
+    }
+
+    function updateDashboardUI() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const p = user.profile;
+      const stats = getAMEStats(user);
+      const protaCount = (user.prota || []).length;
+      const protaJP = (user.prota || []).reduce((acc, item) => acc + (parseInt(item.jp) || 0), 0);
+
+      document.getElementById('dash-stat-school').textContent = p.sekolah || '-';
+      document.getElementById('dash-stat-mapel').textContent = `${p.mapel || '-'} • ${p.jenjang || 'SMA'}`;
+      document.getElementById('dash-stat-total-jp').textContent = stats.totalJP;
+      document.getElementById('dash-stat-eff-weeks').textContent = stats.totalEffWeeks;
+
+      document.getElementById('dash-stat-prota-count').textContent = protaCount;
+      document.getElementById('dash-stat-prota-allocated').textContent = protaJP;
+      document.getElementById('dash-stat-prota-target').textContent = stats.totalJP;
+
+      const protaBadge = document.getElementById('dash-stat-prota-badge');
+      if (stats.totalJP > 0 && protaJP === stats.totalJP) {
+        protaBadge.className = 'text-emerald-600 font-medium flex items-center gap-1';
+        protaBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> 100% Seimbang';
+      } else if (protaCount === 0) {
+        protaBadge.className = 'text-slate-400 font-medium flex items-center gap-1';
+        protaBadge.innerHTML = '<i class="fa-regular fa-clock"></i> Belum diisi';
+      } else {
+        protaBadge.className = 'text-amber-600 font-medium flex items-center gap-1';
+        protaBadge.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Perlu Penyesuaian';
+      }
+
+      const hasProsem = Object.keys(user.prosemGanjilDist || {}).length > 0 || Object.keys(user.prosemGenapDist || {}).length > 0;
+      document.getElementById('dash-stat-prosem-status').textContent = hasProsem ? 'Tersinkron' : (protaCount > 0 ? 'Siap Dibagi' : 'Belum diisi');
+
+      renderRekapGuruTable();
+    }
+
+    function renderRekapGuruTable() {
+      const tbody = document.getElementById('rekap-guru-table-body');
+      const countBadge = document.getElementById('rekap-guru-count-badge');
+      const query = (document.getElementById('rekap-guru-search')?.value || '').toLowerCase();
+      if (!tbody) return;
+
+      const entries = Object.entries(appState.users || {}).filter(([uid, u]) => {
+        if (!query) return true;
+        const p = u.profile || {};
+        return (
+          (p.nama || '').toLowerCase().includes(query) ||
+          (u.email || '').toLowerCase().includes(query) ||
+          (p.sekolah || '').toLowerCase().includes(query) ||
+          (p.mapel || '').toLowerCase().includes(query)
+        );
+      });
+
+      if (countBadge) countBadge.textContent = `${Object.keys(appState.users || {}).length} Guru`;
+
+      if (entries.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-400 italic">Belum ada data guru yang terdaftar.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = entries.map(([uid, u], idx) => {
+        const p = u.profile || {};
+        const stats = getAMEStats(u);
+        const protaCount = (u.prota || []).length;
+        const protaJP = (u.prota || []).reduce((acc, item) => acc + (parseInt(item.jp) || 0), 0);
+        const hasProsem = Object.keys(u.prosemGanjilDist || {}).length > 0 || Object.keys(u.prosemGenapDist || {}).length > 0;
+        const isCurrent = uid === appState.currentUser;
+
+        const ameBadge = stats.totalJP > 0
+          ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">${stats.totalJP} JP (${stats.totalEffWeeks} Mgg)</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-500">Belum diisi</span>`;
+
+        const protaBadge = protaCount > 0
+          ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-800">${protaCount} Bab (${protaJP} JP)</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-500">Belum diisi</span>`;
+
+        const prosemBadge = hasProsem
+          ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-teal-100 text-teal-800">Tersusun</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-500">Belum diisi</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50 ${isCurrent ? 'bg-indigo-50/40' : ''}">
+            <td class="py-3 px-3 text-center text-slate-500 font-medium">${idx + 1}</td>
+            <td class="py-3 px-3">
+              <div class="font-bold text-slate-800 flex items-center gap-1.5">
+                ${p.nama || '-'}
+                ${isCurrent ? '<span class="text-[10px] px-1.5 py-0.2 rounded bg-indigo-600 text-white">Aktif</span>' : ''}
+              </div>
+              <div class="text-[11px] text-indigo-600">${u.email}</div>
+            </td>
+            <td class="py-3 px-3">
+              <div class="font-semibold text-slate-700">${p.sekolah || '-'}</div>
+              <div class="text-[10px] text-slate-500">${p.jenjang || 'SMA'} • ${p.statusSekolah || 'NEGERI'}</div>
+            </td>
+            <td class="py-3 px-3 font-medium text-slate-700">${p.mapel || '-'}</td>
+            <td class="py-3 px-3 text-center">${ameBadge}</td>
+            <td class="py-3 px-3 text-center">${protaBadge}</td>
+            <td class="py-3 px-3 text-center">${prosemBadge}</td>
+            <td class="py-3 px-3 text-center">
+              <div class="flex items-center justify-center gap-1">
+                <button onclick="switchToUserAccount('${uid}')" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg text-[11px] font-semibold" title="Buka Akun Ini">
+                  <i class="fa-solid fa-right-to-bracket"></i>
+                </button>
+                <button onclick="openEditGuruModal('${uid}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-[11px] font-semibold" title="Edit Data Guru">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button onclick="openDeleteGuruModal('${uid}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-[11px] font-semibold" title="Hapus Guru">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function switchToUserAccount(uid) {
+      if (!appState.users[uid]) return;
+      appState.currentUser = uid;
+      saveAppState();
+      initAppForCurrentUser();
+      showToast(`Beralih ke akun ${appState.users[uid].profile.nama}`);
+    }
+
+    function openEditGuruModal(uid) {
+      const u = appState.users[uid];
+      if (!u) return;
+      const p = u.profile || {};
+      document.getElementById('edit-guru-uid').value = uid;
+      document.getElementById('edit-guru-nama').value = p.nama || '';
+      document.getElementById('edit-guru-email').value = u.email || '';
+      document.getElementById('edit-guru-jenjang').value = p.jenjang || 'SMA';
+      document.getElementById('edit-guru-status').value = p.statusSekolah || 'NEGERI';
+      document.getElementById('edit-guru-sekolah').value = p.sekolah || '';
+      document.getElementById('edit-guru-nip').value = p.nip || '';
+      document.getElementById('edit-guru-nuptk').value = p.nuptk || '';
+      document.getElementById('edit-guru-mapel').value = p.mapel || '';
+      handleEditModalStatusChange(p.statusSekolah || 'NEGERI');
+
+      document.getElementById('modal-edit-guru').classList.remove('hidden');
+      document.getElementById('modal-edit-guru').classList.add('flex');
+    }
+
+    function handleEditModalStatusChange(status) {
+      const nipEl = document.getElementById('edit-guru-nip');
+      if (status === 'SWASTA') {
+        nipEl.value = '-';
+        nipEl.disabled = true;
+      } else {
+        if (nipEl.value === '-') nipEl.value = '';
+        nipEl.disabled = false;
+      }
+    }
+
+    function closeEditGuruModal() {
+      document.getElementById('modal-edit-guru').classList.add('hidden');
+      document.getElementById('modal-edit-guru').classList.remove('flex');
+    }
+
+    function saveEditedGuru(event) {
+      event.preventDefault();
+      const uid = document.getElementById('edit-guru-uid').value;
+      const u = appState.users[uid];
+      if (!u) return;
+
+      const status = document.getElementById('edit-guru-status').value;
+      u.email = normalizeCredential(document.getElementById('edit-guru-email').value);
+      u.profile.nama = document.getElementById('edit-guru-nama').value.trim();
+      u.profile.jenjang = document.getElementById('edit-guru-jenjang').value;
+      u.profile.statusSekolah = status;
+      u.profile.sekolah = document.getElementById('edit-guru-sekolah').value.trim();
+      u.profile.nip = status === 'SWASTA' ? '-' : (document.getElementById('edit-guru-nip').value.trim() || '-');
+      u.profile.nuptk = document.getElementById('edit-guru-nuptk').value.trim() || '-';
+      u.profile.mapel = document.getElementById('edit-guru-mapel').value.trim();
+
+      saveAppState();
+      closeEditGuruModal();
+      updateNavbarAndDashboard();
+      showToast('Data guru berhasil diperbarui!');
+    }
+
+    function openDeleteGuruModal(uid) {
+      const u = appState.users[uid];
+      if (!u) return;
+      document.getElementById('delete-guru-uid').value = uid;
+      document.getElementById('delete-guru-target-name').textContent = `${u.profile.nama} (${u.email})`;
+      document.getElementById('modal-delete-guru').classList.remove('hidden');
+      document.getElementById('modal-delete-guru').classList.add('flex');
+    }
+
+    function closeDeleteGuruModal() {
+      document.getElementById('modal-delete-guru').classList.add('hidden');
+      document.getElementById('modal-delete-guru').classList.remove('flex');
+    }
+
+    function confirmDeleteGuru() {
+      const uid = document.getElementById('delete-guru-uid').value;
+      if (!appState.users[uid]) return;
+      const deletingActive = (appState.currentUser === uid);
+      delete appState.users[uid];
+
+      const remainingKeys = Object.keys(appState.users);
+      if (remainingKeys.length === 0) {
+        appState.currentUser = null;
+        appState.isLoggedIn = false;
+        saveAppState();
+        closeDeleteGuruModal();
+        performLogout();
+        showToast('Akun guru dihapus. Silakan daftar atau login kembali.');
+        return;
+      }
+
+      if (deletingActive) {
+        appState.currentUser = remainingKeys[0];
+      }
+      saveAppState();
+      closeDeleteGuruModal();
+      initAppForCurrentUser();
+      showToast('Akun guru berhasil dihapus permanen.');
+    }
+
+    function exportRekapGuruCSV() {
+      const rows = [['No', 'Nama Guru', 'Email Belajar.id', 'Jenjang', 'Status', 'Sekolah', 'NIP', 'NUPTK', 'Mata Pelajaran', 'Total JP AME', 'Jumlah Bab PROTA']];
+      Object.values(appState.users || {}).forEach((u, i) => {
+        const p = u.profile || {};
+        const stats = getAMEStats(u);
+        rows.push([
+          i + 1,
+          `"${p.nama || ''}"`,
+          u.email,
+          p.jenjang || '',
+          p.statusSekolah || '',
+          `"${p.sekolah || ''}"`,
+          `"${p.nip || '-'}"`,
+          `"${p.nuptk || '-'}"`,
+          `"${p.mapel || ''}"`,
+          stats.totalJP,
+          (u.prota || []).length
+        ]);
+      });
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(e => e.join(',')).join('\n');
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', 'Rekap_Guru_Terdaftar_BelajarID.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('File Rekap Guru (.csv) berhasil diunduh!');
+    }
+
+    // ==================== USER MODAL & BACKUP ====================
+    function openUserModal() {
+      const user = getCurrentUser();
+      if (!user) return;
+      document.getElementById('modal-avatar-initial').textContent = (user.profile.nama || 'G').charAt(0).toUpperCase();
+      document.getElementById('modal-user-name').textContent = user.profile.nama;
+      document.getElementById('modal-user-email').textContent = user.email;
+
+      const listEl = document.getElementById('modal-user-list');
+      listEl.innerHTML = Object.entries(appState.users).map(([uid, u]) => `
+        <div onclick="switchToUserAccount('${uid}'); closeUserModal();" class="p-2.5 rounded-xl border ${uid === appState.currentUser ? 'border-indigo-500 bg-indigo-50' : 'border-slate-200 hover:bg-slate-50'} cursor-pointer flex items-center justify-between">
+          <div>
+            <div class="font-bold text-slate-800">${u.profile.nama}</div>
+            <div class="text-[11px] text-slate-500">${u.email}</div>
+          </div>
+          ${uid === appState.currentUser ? '<span class="text-[10px] font-bold text-indigo-700">Aktif</span>' : '<span class="text-[10px] text-slate-400">Pilih</span>'}
+        </div>
+      `).join('');
+
+      document.getElementById('modal-user').classList.remove('hidden');
+      document.getElementById('modal-user').classList.add('flex');
+    }
+
+    function closeUserModal() {
+      document.getElementById('modal-user').classList.add('hidden');
+      document.getElementById('modal-user').classList.remove('flex');
+    }
+
+    function exportBackupJSON() {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(appState, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute('href', dataStr);
+      a.setAttribute('download', `Backup_Administrasi_Guru_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Cadangan data (.json) berhasil diunduh!');
+    }
+
+    function importBackupJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported && imported.users && Object.keys(imported.users).length > 0) {
+            appState = imported;
+            appState.currentUser = Object.keys(imported.users)[0];
+            appState.isLoggedIn = true;
+            saveAppState();
+            initAppForCurrentUser();
+            showToast('Data cadangan berhasil dipulihkan!');
+          } else {
+            showToast('Format file cadangan tidak valid atau kosong.', 'error');
+          }
+        } catch (err) {
+          showToast('Gagal membaca file JSON.', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ==================== EXPORT & PRINT PREVIEW ====================
+    function buildSignatureBlock(p) {
+      const idGuru = p.statusSekolah === 'SWASTA' ? `NUPTK. ${p.nuptk || '-'}` : `NIP. ${p.nip || '-'}`;
+      return `
+        <table style="width:100%; margin-top:28px; border:none; border-collapse:collapse; font-size:12px;">
+          <tr>
+            <td style="width:50%; text-align:center; vertical-align:top; border:none;">
+              Mengetahui,<br>Kepala ${p.sekolah}<br><br><br><br>
+              <strong><u>${p.kepsek}</u></strong><br>
+              NIP. ${p.nipKepsek || '-'}
+            </td>
+            <td style="width:50%; text-align:center; vertical-align:top; border:none;">
+              ${p.titimangsa || ''}<br>Guru Mata Pelajaran,<br><br><br><br>
+              <strong><u>${p.nama}</u></strong><br>
+              ${idGuru}
+            </td>
+          </tr>
+        </table>
+      `;
+    }
+
+    function buildKopHeader(p, docTitle) {
+      const idGuru = p.statusSekolah === 'SWASTA' ? `NUPTK: ${p.nuptk || '-'}` : `NIP: ${p.nip || '-'}`;
+      return `
+        <div style="text-align:center; border-bottom:3px double #000; padding-bottom:10px; margin-bottom:16px;">
+          <div style="font-size:15px; font-weight:bold; text-transform:uppercase;">${p.sekolah}</div>
+          <div style="font-size:12px; font-weight:bold; margin-top:2px;">${docTitle}</div>
+          <div style="font-size:11px;">TAHUN PELAJARAN ${p.tp}</div>
+        </div>
+        <table style="width:100%; font-size:12px; margin-bottom:14px; border:none;">
+          <tr><td style="width:160px; border:none;">Jenjang / Status</td><td style="border:none;">: ${p.jenjang} (${p.statusSekolah})</td></tr>
+          <tr><td style="border:none;">Mata Pelajaran</td><td style="border:none;">: ${p.mapel}</td></tr>
+          <tr><td style="border:none;">Fase / Kelas</td><td style="border:none;">: ${p.fase}</td></tr>
+          <tr><td style="border:none;">Nama Guru</td><td style="border:none;">: ${p.nama} (${idGuru})</td></tr>
+        </table>
+      `;
+    }
+
+    function generateAMEDocHTML(user) {
+      const p = user.profile;
+      const stats = getAMEStats(user);
+      const renderRows = (list, label) => list.map((r, i) => {
+        const eff = Math.max(0, (parseInt(r.kalender) || 0) - (parseInt(r.nonEff) || 0));
+        return `
+          <tr>
+            <td style="border:1px solid #333; padding:5px; text-align:center;">${i + 1}</td>
+            <td style="border:1px solid #333; padding:5px;">${label} - ${r.bulan}</td>
+            <td style="border:1px solid #333; padding:5px; text-align:center;">${r.kalender}</td>
+            <td style="border:1px solid #333; padding:5px; text-align:center;">${r.nonEff}</td>
+            <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${eff}</td>
+            <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${eff * stats.jpPerWeek} JP</td>
+            <td style="border:1px solid #333; padding:5px;">${r.ket || '-'}</td>
+          </tr>
+        `;
+      }).join('');
+
+      return `
+        ${buildKopHeader(p, 'ANALISIS MINGGU EFEKTIF (AME) & ALOKASI JAM PELAJARAN')}
+        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+          <thead>
+            <tr style="background:#f1f5f9;">
+              <th style="border:1px solid #333; padding:6px;">No</th>
+              <th style="border:1px solid #333; padding:6px;">Semester / Bulan</th>
+              <th style="border:1px solid #333; padding:6px;">Mgg Kalender</th>
+              <th style="border:1px solid #333; padding:6px;">Tdk Efektif</th>
+              <th style="border:1px solid #333; padding:6px;">Mgg Efektif</th>
+              <th style="border:1px solid #333; padding:6px;">Jam Efektif</th>
+              <th style="border:1px solid #333; padding:6px;">Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${renderRows(user.ame.ganjil, 'Ganjil')}
+            ${renderRows(user.ame.genap, 'Genap')}
+            <tr style="background:#e2e8f0; font-weight:bold;">
+              <td colspan="4" style="border:1px solid #333; padding:6px; text-align:right;">TOTAL SETAHUN (Rujukan Permendikdasmen No. 13 Tahun 2026):</td>
+              <td style="border:1px solid #333; padding:6px; text-align:center;">${stats.totalEffWeeks} Mgg</td>
+              <td style="border:1px solid #333; padding:6px; text-align:center;">${stats.totalJP} JP</td>
+              <td style="border:1px solid #333; padding:6px;">Beban ${stats.jpPerWeek} JP/Mgg</td>
+            </tr>
+          </tbody>
+        </table>
+        ${buildSignatureBlock(p)}
+      `;
+    }
+
+    function generatePROTADocHTML(user) {
+      const p = user.profile;
+      let totalJP = 0;
+      const rows = (user.prota || []).map((item, i) => {
+        totalJP += parseInt(item.jp) || 0;
+        return `
+          <tr>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${i + 1}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${item.semester}</td>
+            <td style="border:1px solid #333; padding:6px;">${item.elemen}</td>
+            <td style="border:1px solid #333; padding:6px;">${item.materi}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${item.jp} JP</td>
+          </tr>
+        `;
+      }).join('');
+
+      return `
+        ${buildKopHeader(p, 'PROGRAM TAHUNAN (PROTA) KURIKULUM MERDEKA')}
+        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+          <thead>
+            <tr style="background:#f1f5f9;">
+              <th style="border:1px solid #333; padding:6px; width:35px;">No</th>
+              <th style="border:1px solid #333; padding:6px; width:75px;">Semester</th>
+              <th style="border:1px solid #333; padding:6px; width:150px;">Elemen Capaian</th>
+              <th style="border:1px solid #333; padding:6px;">Materi Pokok / Tujuan Pembelajaran</th>
+              <th style="border:1px solid #333; padding:6px; width:75px;">Alokasi JP</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows || '<tr><td colspan="5" style="border:1px solid #333; padding:10px; text-align:center;">Belum ada data PROTA</td></tr>'}
+            <tr style="background:#e2e8f0; font-weight:bold;">
+              <td colspan="4" style="border:1px solid #333; padding:6px; text-align:right;">JUMLAH TOTAL JAM PELAJARAN TAHUNAN:</td>
+              <td style="border:1px solid #333; padding:6px; text-align:center;">${totalJP} JP</td>
+            </tr>
+          </tbody>
+        </table>
+        ${buildSignatureBlock(p)}
+      `;
+    }
+
+    function generatePROSEMDocHTML(user) {
+      const p = user.profile;
+      const renderSem = (semLabel, distMap, months) => {
+        const items = (user.prota || []).filter(item => item.semester === semLabel);
+        const bodyRows = items.map((item, idx) => {
+          const arr = distMap[item.id] || Array(30).fill(0);
+          const cells = arr.map(v => `<td style="border:1px solid #333; padding:2px; text-align:center; font-size:9px; background:${v > 0 ? '#dbeafe' : '#fff'};">${v > 0 ? v : ''}</td>`).join('');
+          return `
+            <tr>
+              <td style="border:1px solid #333; padding:4px; text-align:center;">${idx + 1}</td>
+              <td style="border:1px solid #333; padding:4px;">${item.materi}</td>
+              <td style="border:1px solid #333; padding:4px; text-align:center; font-weight:bold;">${item.jp}</td>
+              ${cells}
+            </tr>
+          `;
+        }).join('');
+
+        return `
+          <div style="font-weight:bold; font-size:12px; margin:12px 0 6px 0;">SEMESTER ${semLabel.toUpperCase()}</div>
+          <table style="width:100%; border-collapse:collapse; font-size:10px;">
+            <thead>
+              <tr style="background:#f1f5f9;">
+                <th rowspan="2" style="border:1px solid #333; padding:4px;">No</th>
+                <th rowspan="2" style="border:1px solid #333; padding:4px;">Materi Pokok</th>
+                <th rowspan="2" style="border:1px solid #333; padding:4px;">JP</th>
+                ${months.map(m => `<th colspan="5" style="border:1px solid #333; padding:3px;">${m}</th>`).join('')}
+              </tr>
+              <tr style="background:#f8fafc; font-size:8px;">
+                ${Array(6).fill('<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>').join('').replace(/<th>/g, '<th style="border:1px solid #333; padding:2px;">')}
+              </tr>
+            </thead>
+            <tbody>
+              ${bodyRows || '<tr><td colspan="33" style="border:1px solid #333; padding:8px; text-align:center;">Belum ada data</td></tr>'}
+            </tbody>
+          </table>
+        `;
+      };
+
+      return `
+        ${buildKopHeader(p, 'PROGRAM SEMESTER (PROSEM) KURIKULUM MERDEKA')}
+        ${renderSem('Ganjil', user.prosemGanjilDist || {}, ['Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'])}
+        ${renderSem('Genap', user.prosemGenapDist || {}, ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'])}
+        ${buildSignatureBlock(p)}
+      `;
+    }
+
+    function renderPrintPreview() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const docType = document.getElementById('export-doc-type').value;
+      const container = document.getElementById('print-area');
+
+      if (docType === 'AME') container.innerHTML = generateAMEDocHTML(user);
+      else if (docType === 'PROTA') container.innerHTML = generatePROTADocHTML(user);
+      else if (docType === 'PROSEM') container.innerHTML = generatePROSEMDocHTML(user);
+      else {
+        container.innerHTML = `
+          ${generateAMEDocHTML(user)}
+          <div style="page-break-before: always; margin-top: 32px; border-top: 2px dashed #cbd5e1; padding-top: 24px;"></div>
+          ${generatePROTADocHTML(user)}
+          <div style="page-break-before: always; margin-top: 32px; border-top: 2px dashed #cbd5e1; padding-top: 24px;"></div>
+          ${generatePROSEMDocHTML(user)}
+        `;
+      }
+    }
+
+    function downloadAsWordDoc() {
+      renderPrintPreview();
+      const user = getCurrentUser();
+      if (!user) return;
+      const docType = document.getElementById('export-doc-type').value;
+      const content = document.getElementById('print-area').innerHTML;
+
+      const htmlDoc = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><meta charset='utf-8'><title>Administrasi Guru - ${docType}</title></head>
+        <body style="font-family: Arial, sans-serif;">${content}</body>
+        </html>
+      `;
+
+      const blob = new Blob(['\ufeff', htmlDoc], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${docType}_${(user.profile.nama || 'Guru').replace(/\s+/g, '_')}.doc`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast(`Dokumen Word (${docType}) berhasil diunduh!`);
+    }
+
+    function triggerPrintPDF() {
+      renderPrintPreview();
+      window.print();
+    }
+
+    // ==================== INITIALIZATION ====================
+    function initAppForCurrentUser() {
+      const user = getCurrentUser();
+      if (!user) return;
+      updateNavbarAndDashboard();
+      populateProfileForm();
+      renderAMETable();
+      renderProtaTable();
+      renderProsemTable();
+      renderPrintPreview();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLoginSavedAccounts();
+      if (appState && appState.isLoggedIn && appState.currentUser && appState.users[appState.currentUser]) {
+        document.getElementById('auth-screen').classList.add('hidden');
+        initAppForCurrentUser();
+      } else {
+        document.getElementById('auth-screen').classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
